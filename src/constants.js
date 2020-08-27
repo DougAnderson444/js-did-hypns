@@ -1,0 +1,1 @@
+export const DID_DOC_FILENAME = "did-doc-hyper";

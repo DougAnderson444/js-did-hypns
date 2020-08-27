@@ -1,0 +1,36 @@
+{
+  "name": "js-did-hyper",
+  "version": "0.0.1",
+  "description": "Decentralized identity document method using hyper protocol",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DougAnderson444/js-did-hyper.git"
+  },
+  "keywords": [
+    "hyper",
+    "dat",
+    "did",
+    "did",
+    "method"
+  ],
+  "author": "Douglas S Anderson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DougAnderson444/js-did-hyper/issues"
+  },
+  "homepage": "https://github.com/DougAnderson444/js-did-hyper#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-private-methods": "^7.10.4",
+    "@babel/preset-env": "^7.11.0",
+    "@moxy/babel-preset": "^3.3.1",
+    "babel-jest": "^26.3.0",
+    "jest": "^26.4.2"
+  }
+}
