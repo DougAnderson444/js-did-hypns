@@ -14,7 +14,7 @@ class HyperId {
     this.#drive = drive;
   }
 
-  async create(operations) {
+  create = async (operations) => {
     try {
       await this.#drive.ready();
     } catch (error) {
@@ -38,9 +38,9 @@ class HyperId {
 
     // if it reads successfully, we need to throw IllegalCreate
     throw new IllegalCreate();
-  }
+  };
 
-  async update(drive, operations) {
+  update = async (drive, operations) => {
     try {
       await this.#drive.ready();
     } catch (error) {
@@ -55,7 +55,7 @@ class HyperId {
     operations(document);
 
     return await this.publish(document.getContent(), drive);
-  }
+  };
 
   publish = async (content, drive) => {
     try {
@@ -66,15 +66,6 @@ class HyperId {
     }
   };
 }
-
-export const getDid = async (drive) => {
-  try {
-    await this.#drive.ready();
-  } catch (error) {
-    throw new UnavailableHyperdrive();
-  }
-  return `did:hyper:${this.#drive.key}`;
-};
 
 export const resolve = async (did) => {
   const { identifier } = parseDid(did);
@@ -117,6 +108,15 @@ export const resolve = async (did) => {
     // Which is important for speeding up peer discovery
     await close();
   }
+};
+
+export const getDid = async (drive) => {
+  try {
+    await drive.ready();
+  } catch (error) {
+    throw new UnavailableHyperdrive();
+  }
+  return `did:hyper:${drive.key}`;
 };
 
 const createDidHyper = (drive) => {
