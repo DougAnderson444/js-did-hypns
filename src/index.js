@@ -9,21 +9,24 @@ import {
 import { DID_DOC_FILENAME } from "./constants";
 
 class HyperId {
-  constructor() {}
+  #drive;
+  constructor(drive) {
+    this.#drive = drive;
+  }
 
-  async create(drive, operations) {
+  async create(operations) {
     try {
-      await drive.ready();
+      await this.#drive.ready();
     } catch (error) {
       throw new UnavailableHyperdrive();
     }
-    if (!drive.writable) throw new UnavailableHyperdrive();
+    if (!this.#drive.writable) throw new UnavailableHyperdrive();
 
     const did = await getDid(drive);
 
     try {
       // try to read it to ensure it doesnt already exist
-      await drive.readFile(DID_DOC_FILENAME, "utf8");
+      await this.#drive.readFile(DID_DOC_FILENAME, "utf8");
     } catch (error) {
       // if it fails to read, we are allowed to create it
       const document = createDocument(did);
@@ -37,55 +40,16 @@ class HyperId {
     throw new IllegalCreate();
   }
 
-  resolve = async (did, Hyperdrive, close) => {
-    const { identifier } = parseDid(did);
-
+  async update(drive, operations) {
     try {
-      const copy = Hyperdrive(identifier);
-
-      try {
-        await copy.ready();
-      } catch (error) {
-        throw new UnavailableHyperdrive();
-      }
-
-      // Wait for the connection to be made
-      if (!copy.peers.length) {
-        await once(copy, "peer-open");
-      }
-
-      const content = await copy.readFile(DID_DOC_FILENAME, "utf8");
-
-      assertDocument(content);
-
-      return content;
-    } catch (err) {
-      //console.log("resolve err:", err);
-      if (err.code === "INVALID_DOCUMENT") {
-        throw err;
-      }
-
-      throw new InvalidDid(did, `Unable to resolve document with DID: ${did}`, {
-        originalError: err.message,
-      });
-    } finally {
-      // Make sure to always close the SDK when you're done
-      // This will remove entries from the p2p network
-      // Which is important for speeding up peer discovery
-      await close();
-    }
-  };
-
-  async update(operations, drive) {
-    try {
-      await drive.ready();
+      await this.#drive.ready();
     } catch (error) {
       throw new UnavailableHyperdrive();
     }
-    if (!drive.writable) throw new UnavailableHyperdrive();
+    if (!this.#drive.writable) throw new UnavailableHyperdrive();
 
     const did = await getDid(drive);
-    const content = await drive.readFile(DID_DOC_FILENAME, "utf8");
+    const content = await this.#drive.readFile(DID_DOC_FILENAME, "utf8");
     const document = createDocument(did, content);
 
     operations(document);
@@ -95,7 +59,8 @@ class HyperId {
 
   publish = async (content, drive) => {
     try {
-      await drive.writeFile(DID_DOC_FILENAME, content);
+      await this.#drive.writeFile(DID_DOC_FILENAME, content);
+      return content;
     } catch (error) {
       //console.log(error);
     }
@@ -104,15 +69,58 @@ class HyperId {
 
 export const getDid = async (drive) => {
   try {
-    await drive.ready();
+    await this.#drive.ready();
   } catch (error) {
     throw new UnavailableHyperdrive();
   }
-  return `did:hyper:${drive.key}`;
+  return `did:hyper:${this.#drive.key}`;
 };
 
-const createDidHyper = () => {
-  return new HyperId();
+export const resolve = async (did) => {
+  const { identifier } = parseDid(did);
+
+  try {
+    var { Hyperdrive, close } = await SDK({
+      persist: false,
+    });
+
+    const copy = Hyperdrive(identifier);
+
+    try {
+      await copy.ready();
+    } catch (error) {
+      throw new UnavailableHyperdrive();
+    }
+
+    // Wait for the connection to be made
+    if (!copy.peers.length) {
+      await once(copy, "peer-open");
+    }
+
+    const content = await copy.readFile(DID_DOC_FILENAME, "utf8");
+
+    assertDocument(content);
+
+    return content;
+  } catch (err) {
+    //console.log("resolve err:", err);
+    if (err.code === "INVALID_DOCUMENT") {
+      throw err;
+    }
+
+    throw new InvalidDid(did, `Unable to resolve document with DID: ${did}`, {
+      originalError: err.message,
+    });
+  } finally {
+    // Make sure to always close the SDK when you're done
+    // This will remove entries from the p2p network
+    // Which is important for speeding up peer discovery
+    await close();
+  }
+};
+
+const createDidHyper = (drive) => {
+  return new HyperId(drive);
 };
 
 export default createDidHyper;

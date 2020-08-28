@@ -19,3 +19,8 @@ export const isDidValid = (did) => {
         return false;
     }
 };
+
+export const generateRandomString = () =>
+    Math.random()
+    .toString(36)
+    .substring(2);

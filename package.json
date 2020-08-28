@@ -2,8 +2,12 @@
   "name": "js-did-hyper",
   "version": "0.0.1",
   "description": "Decentralized identity document method using hyper protocol",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
   "scripts": {
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src -d lib --ignore \"**/__tests__\" --delete-dir-on-start",
+    "build:es": "cross-env BABEL_ENV=es babel src -d es --ignore \"**/__tests__\" --delete-dir-on-start",
+    "build": "npm run build:commonjs && npm run build:es",
     "test": "jest --coverage"
   },
   "repository": {
@@ -14,15 +18,22 @@
     "hyper",
     "dat",
     "did",
-    "did",
-    "method"
+    "method",
+    "ssi"
   ],
   "author": "Douglas S Anderson",
   "license": "MIT",
+  "files": [
+    "lib",
+    "es"
+  ],
   "bugs": {
     "url": "https://github.com/DougAnderson444/js-did-hyper/issues"
   },
   "homepage": "https://github.com/DougAnderson444/js-did-hyper#readme",
+  "dependencies": {
+    "lodash": "^4.17.20"
+  },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.11.4",
@@ -31,6 +42,13 @@
     "@babel/preset-env": "^7.11.0",
     "@moxy/babel-preset": "^3.3.1",
     "babel-jest": "^26.3.0",
+    "cross-env": "^7.0.2",
     "jest": "^26.4.2"
+  },
+  "peerDependencies": {
+    "hyperdrive": "^10.17.0"
+  },
+  "jest": {
+    "testRegex": "/__tests__/.*\\.test\\.js$"
   }
 }

@@ -167,7 +167,7 @@ describe("update", () => {
 
     hyperId.readFile = jest.fn(() => mockDocument);
 
-    const document = await hyperId.update(operations, mockHyperDrive);
+    const document = await hyperId.update(mockHyperDrive, operations);
 
     expect(operations).toHaveBeenCalledTimes(1);
     expect(operations.mock.calls[0][0].constructor.name).toEqual("Document");
@@ -182,7 +182,7 @@ describe("update", () => {
     });
 
     await expect(
-      hyperId.update(operations, mockEmptyHyperdrive)
+      hyperId.update(mockEmptyHyperdrive, operations)
     ).rejects.toThrow("foo");
   });
 });
