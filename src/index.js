@@ -6,7 +6,7 @@ import {
   IllegalCreate,
 } from "./utils/errors";
 import SDK from "dat-sdk";
-
+import { once } from "events";
 import { DID_DOC_FILENAME } from "./constants";
 
 class HyperId {
@@ -51,7 +51,7 @@ class HyperId {
 
     const did = await getDid(this.#drive);
     const contentString = await this.#drive.readFile(DID_DOC_FILENAME, "utf8");
-    const content = JSON.parse(contentString)
+    const content = JSON.parse(contentString);
     const document = createDocument(did, content);
 
     operations(document);
@@ -61,57 +61,62 @@ class HyperId {
 
   publish = async (content) => {
     try {
-      console.log(`write to name: ${DID_DOC_FILENAME}\n Content: ${JSON.stringify(content)}`)
       await this.#drive.writeFile(DID_DOC_FILENAME, JSON.stringify(content));
       return content;
     } catch (error) {
       console.log(error);
     }
   };
-}
 
-export const resolve = async (did) => {
-  const { identifier } = parseDid(did);
-  let content
-  try {
-    var { close, Hyperdrive } = await SDK({
-      persist: false,
-    });
-
-    const copy = Hyperdrive(identifier);
-
+  resolve = async (did) => {
+    const { identifier } = parseDid(did);
+    let content;
     try {
-      await copy.ready();
-    } catch (error) {
-      throw new UnavailableHyperdrive();
+      var { close, Hyperdrive } = await SDK({
+        persist: false,
+      });
+
+      let contentString;
+
+      if (did && identifier != this.#drive.key.toString("hex")) {
+        // not self, get a copy
+        const copy = Hyperdrive(identifier);
+
+        try {
+          await copy.ready();
+        } catch (error) {
+          throw new UnavailableHyperdrive();
+        }
+
+        // Wait for the connection to be made
+        if (!copy.peers.length) {
+          console.log("no peers yet, waiting for them...");
+          await once(copy, "peer-open"); //timeout?
+        }
+        contentString = await copy.readFile(DID_DOC_FILENAME, "utf8");
+      } else {
+        // self
+        contentString = await this.#drive.readFile(DID_DOC_FILENAME, "utf8");
+      }
+
+      content = JSON.parse(contentString);
+
+      assertDocument(content);
+    } catch (err) {
+      console.log("resolve Error: ", err);
+      if (err.code === "INVALID_DOCUMENT") {
+        throw err;
+      }
+
+      throw new InvalidDid(did, `Unable to resolve document with DID: ${did}`, {
+        originalError: err.message,
+      });
+    } finally {
+      await close();
+      return content;
     }
-
-    // Wait for the connection to be made
-    if (!copy.peers.length) {
-      await once(copy, "peer-open");
-    }
-
-    const contentString = await copy.readFile(DID_DOC_FILENAME, "utf8");
-    content = JSON.parse(contentString)
-
-    assertDocument(content);
-
-  } catch (err) {
-    console.log("resolve Error: ", err);
-    if (err.code === "INVALID_DOCUMENT") {
-      throw err;
-    }
-
-    throw new InvalidDid(did, `Unable to resolve document with DID: ${did}`, {
-      originalError: err.message,
-    });
-  } finally {
-    await close();
-  }
-  
-  return content;
-  
-};
+  };
+}
 
 export const getDid = async (drive) => {
   try {

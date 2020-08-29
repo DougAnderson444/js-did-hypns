@@ -15,10 +15,11 @@ module.exports = {
       svelte: path.resolve("node_modules", "svelte"),
       fs: "graceful-fs",
       util: "util",
+      hyperswarm: "hyperswarm-web",
+      "hyperswarm": "hyperswarm-web",
       "../sodium-modules": "../sodium-modules.json",
       "sodium-native": "@geut/sodium-javascript-plus",
-      "sodium-universal": "@geut/sodium-javascript-plus",
-      hyperswarm: "hyperswarm-web"
+      "sodium-universal": "@geut/sodium-javascript-plus"
     },
     extensions: [".mjs", ".js", ".svelte"],
     mainFields: ["svelte", "browser", "module", "main"],

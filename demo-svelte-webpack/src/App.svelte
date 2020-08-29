@@ -3,25 +3,29 @@
   import createDidHyper, { resolve, getDid } from "js-did-hyper";
   import SDK from "dat-sdk";
   import ObjectComp from "./ObjectComp.svelte";
+  import { DID_DOC_FILENAME } from "js-did-hyper/src/constants";
+  import { once } from "events";
 
   let did,
-    resolveContents,
+    resolveSelfContents,
     driveName,
     initialContents,
     updatedContents,
     drive,
-    key;
+    key,
+    buddy,
+    value;
 
   onMount(async () => {
     try {
       // create the hyperdrive
-      var { Hyperdrive, close } = await SDK({
-        persist: false // make true if you want to use this DID in real life
+      var { Hyperdrive: Hyperdrive1, close: close1 } = await SDK({
+        persist: false
       });
 
       // make a named drive, save the drive & drive name to keep using this DID
       driveName = "Doug-Laptop-DID-Drive";
-      drive = Hyperdrive(driveName);
+      drive = Hyperdrive1(driveName);
 
       // Before using functions of the drive,
       // It's good to wait for it to fully loaded
@@ -31,7 +35,6 @@
 
       // use that drive to make a hyperId
       const hyperId = createDidHyper(drive);
-      console.log(`hyperId`, hyperId);
 
       const createOps = document => {
         document.addPublicKey({
@@ -41,9 +44,7 @@
         });
       };
 
-      console.log(`createOps`, createOps);
       initialContents = await hyperId.create(createOps);
-      console.log(`initialContents`, { initialContents });
 
       const updateOps = document => {
         document.addPublicKey({
@@ -53,19 +54,13 @@
         });
       };
 
-      console.log(`updateOps`, { updateOps });
       updatedContents = await hyperId.update(updateOps);
 
       // get the DID of this drive
       did = await getDid(drive);
 
       // get the DID Doc of this DID (if possible)
-      resolveContents = await resolve(did);
-
-      const handleDestroy = () => {};
-
-      return handleDestroy;
-      
+      resolveSelfContents = await hyperId.resolve(did);
     } catch (error) {
       if (error.code === "INVALID_DOCUMENT") {
         throw error;
@@ -76,9 +71,44 @@
       console.log(error);
     } finally {
       // App.svelte
-      await close();
+      await close1();
     }
+
+    const handleDestroy = () => {};
+
+    return handleDestroy;
   });
+
+  const handleSubmit = async () => {
+    if (value && value.length == 64) {
+      var { Hyperdrive: Hyperdrive2, close: close2 } = await SDK({
+        persist: false
+      });
+
+      // Load the drive on the second peer using the key
+      const copy = Hyperdrive2(value);
+
+      await copy.ready();
+
+      console.log("Loaded drive on other peer", copy.key.toString("hex"));
+
+      if (copy.peers.length) {
+        console.log("Already found peers for drive");
+      } else {
+        console.log("Waiting for peers to connect");
+        copy.on("peer-open", () => {
+          console.log("peer opened!");
+        });
+        const [peer] = await once(copy, "peer-open");
+        // You can get a peer's identity from their public key in the connection
+        console.log("Connected to peer", peer.remotePublicKey);
+      }
+
+      const contents = await copy.readFile(DID_DOC_FILENAME, "utf8");
+      buddy = contents;
+      console.log("Copy Read file from original", { contents });
+    }
+  };
 </script>
 
 <style>
@@ -114,8 +144,24 @@
 <p>
   Resolve the content from that DID:
   <br />
-  <ObjectComp val={resolveContents} key="Resolved Contents (Click to expand)" />
+  <ObjectComp
+    val={resolveSelfContents}
+    key="Resolved Contents (Click to expand)" />
 </p>
 <p>
-  ...which should be the same as the last update: {JSON.stringify(resolveContents) == JSON.stringify(updatedContents)}
+  ...which should be the same as the last update: {JSON.stringify(resolveSelfContents) == JSON.stringify(updatedContents)}
+</p>
+
+<div>
+  <form>
+    Get a peer's DID Doc:
+    <br />
+    <input type="text" on:click={handleSubmit} bind:value />
+  </form>
+</div>
+<p>
+  Buddy:
+  <br />
+  <ObjectComp val={buddy} key="Resolved Contents from Peer (Click to expand)" />
+
 </p>
