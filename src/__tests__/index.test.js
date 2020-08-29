@@ -6,13 +6,11 @@ import {
   mockDid,
   mockDocument,
 } from "./mocks";
-import { conflicts } from "yargs";
 import {
   UnavailableHyperdrive,
   InvalidDid,
   InvalidDocument,
 } from "../utils/errors";
-import { DID_DOC_FILENAME } from "../constants";
 
 global.Date = class Date {
   constructor() {

@@ -32,7 +32,12 @@
   },
   "homepage": "https://github.com/DougAnderson444/js-did-hyper#readme",
   "dependencies": {
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.20",
+    "@geut/sodium-javascript-plus": "0.0.6",
+    "dat-sdk": "^2.7.0",
+    "graceful-fs": "^4.2.4",
+    "hyperswarm-web": "^2.0.0",
+    "util": "^0.12.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
@@ -44,9 +49,6 @@
     "babel-jest": "^26.3.0",
     "cross-env": "^7.0.2",
     "jest": "^26.4.2"
-  },
-  "peerDependencies": {
-    "hyperdrive": "^10.17.0"
   },
   "jest": {
     "testRegex": "/__tests__/.*\\.test\\.js$"

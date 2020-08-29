@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
@@ -8,6 +9,7 @@ module.exports = {
   entry: {
     bundle: ["./src/main.js"],
   },
+  target: "web",
   resolve: {
     alias: {
       svelte: path.resolve("node_modules", "svelte"),
@@ -16,7 +18,7 @@ module.exports = {
       "../sodium-modules": "../sodium-modules.json",
       "sodium-native": "@geut/sodium-javascript-plus",
       "sodium-universal": "@geut/sodium-javascript-plus",
-      hyperswarm: "hyperswarm-web",
+      hyperswarm: "hyperswarm-web"
     },
     extensions: [".mjs", ".js", ".svelte"],
     mainFields: ["svelte", "browser", "module", "main"],

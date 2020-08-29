@@ -5,6 +5,7 @@ import {
   InvalidDid,
   IllegalCreate,
 } from "./utils/errors";
+import SDK from "dat-sdk";
 
 import { DID_DOC_FILENAME } from "./constants";
 
@@ -22,7 +23,7 @@ class HyperId {
     }
     if (!this.#drive.writable) throw new UnavailableHyperdrive();
 
-    const did = await getDid(drive);
+    const did = await getDid(this.#drive);
 
     try {
       // try to read it to ensure it doesnt already exist
@@ -33,14 +34,14 @@ class HyperId {
 
       operations(document);
 
-      return await this.publish(drive, document.getContent());
+      return await this.publish(document.getContent());
     }
 
     // if it reads successfully, we need to throw IllegalCreate
     throw new IllegalCreate();
   };
 
-  update = async (drive, operations) => {
+  update = async (operations) => {
     try {
       await this.#drive.ready();
     } catch (error) {
@@ -48,30 +49,32 @@ class HyperId {
     }
     if (!this.#drive.writable) throw new UnavailableHyperdrive();
 
-    const did = await getDid(drive);
-    const content = await this.#drive.readFile(DID_DOC_FILENAME, "utf8");
+    const did = await getDid(this.#drive);
+    const contentString = await this.#drive.readFile(DID_DOC_FILENAME, "utf8");
+    const content = JSON.parse(contentString)
     const document = createDocument(did, content);
 
     operations(document);
 
-    return await this.publish(document.getContent(), drive);
+    return await this.publish(document.getContent());
   };
 
-  publish = async (content, drive) => {
+  publish = async (content) => {
     try {
-      await this.#drive.writeFile(DID_DOC_FILENAME, content);
+      console.log(`write to name: ${DID_DOC_FILENAME}\n Content: ${JSON.stringify(content)}`)
+      await this.#drive.writeFile(DID_DOC_FILENAME, JSON.stringify(content));
       return content;
     } catch (error) {
-      //console.log(error);
+      console.log(error);
     }
   };
 }
 
 export const resolve = async (did) => {
   const { identifier } = parseDid(did);
-
+  let content
   try {
-    var { Hyperdrive, close } = await SDK({
+    var { close, Hyperdrive } = await SDK({
       persist: false,
     });
 
@@ -88,13 +91,13 @@ export const resolve = async (did) => {
       await once(copy, "peer-open");
     }
 
-    const content = await copy.readFile(DID_DOC_FILENAME, "utf8");
+    const contentString = await copy.readFile(DID_DOC_FILENAME, "utf8");
+    content = JSON.parse(contentString)
 
     assertDocument(content);
 
-    return content;
   } catch (err) {
-    //console.log("resolve err:", err);
+    console.log("resolve Error: ", err);
     if (err.code === "INVALID_DOCUMENT") {
       throw err;
     }
@@ -103,11 +106,11 @@ export const resolve = async (did) => {
       originalError: err.message,
     });
   } finally {
-    // Make sure to always close the SDK when you're done
-    // This will remove entries from the p2p network
-    // Which is important for speeding up peer discovery
     await close();
   }
+  
+  return content;
+  
 };
 
 export const getDid = async (drive) => {
@@ -116,10 +119,12 @@ export const getDid = async (drive) => {
   } catch (error) {
     throw new UnavailableHyperdrive();
   }
-  return `did:hyper:${drive.key}`;
+  return `did:hyper:${drive.key.toString("hex")}`;
 };
 
 const createDidHyper = (drive) => {
+  if (!drive.writable) throw new UnavailableHyperdrive();
+
   return new HyperId(drive);
 };
 

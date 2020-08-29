@@ -2,8 +2,15 @@
   import { onMount, onDestroy } from "svelte";
   import createDidHyper, { resolve, getDid } from "js-did-hyper";
   import SDK from "dat-sdk";
+  import ObjectComp from "./ObjectComp.svelte";
 
-  let did, resolveContents, driveName, initialContents, updatedContents;
+  let did,
+    resolveContents,
+    driveName,
+    initialContents,
+    updatedContents,
+    drive,
+    key;
 
   onMount(async () => {
     try {
@@ -14,10 +21,17 @@
 
       // make a named drive, save the drive & drive name to keep using this DID
       driveName = "Doug-Laptop-DID-Drive";
-      const drive = Hyperdrive(driveName);
+      drive = Hyperdrive(driveName);
+
+      // Before using functions of the drive,
+      // It's good to wait for it to fully loaded
+      await drive.ready();
+
+      key = drive.key.toString("hex");
 
       // use that drive to make a hyperId
       const hyperId = createDidHyper(drive);
+      console.log(`hyperId`, hyperId);
 
       const createOps = document => {
         document.addPublicKey({
@@ -27,7 +41,9 @@
         });
       };
 
+      console.log(`createOps`, createOps);
       initialContents = await hyperId.create(createOps);
+      console.log(`initialContents`, { initialContents });
 
       const updateOps = document => {
         document.addPublicKey({
@@ -37,6 +53,7 @@
         });
       };
 
+      console.log(`updateOps`, { updateOps });
       updatedContents = await hyperId.update(updateOps);
 
       // get the DID of this drive
@@ -44,6 +61,11 @@
 
       // get the DID Doc of this DID (if possible)
       resolveContents = await resolve(did);
+
+      const handleDestroy = () => {};
+
+      return handleDestroy;
+      
     } catch (error) {
       if (error.code === "INVALID_DOCUMENT") {
         throw error;
@@ -51,7 +73,9 @@
       if (error.code === "INVALID_DID") {
         throw error;
       }
+      console.log(error);
     } finally {
+      // App.svelte
       await close();
     }
   });
@@ -64,15 +88,23 @@
 </style>
 
 <h1>Hello!</h1>
+
+{#if key}
+  <p>
+    Key is
+    <br />
+    {key}
+  </p>
+{/if}
 <p>
   Created {driveName} with initial contents
   <br />
-  {initialContents}
+  <ObjectComp val={initialContents} key="Initial Contents (Click to expand)" />
 </p>
 <p>
   Updated to contents:
   <br />
-  {updatedContents}
+  <ObjectComp val={updatedContents} key="Updated Contents (Click to expand)" />
 </p>
 <p>
   Get the DID of this drive:
@@ -82,8 +114,8 @@
 <p>
   Resolve the content from that DID:
   <br />
-  {resolveContents}
+  <ObjectComp val={resolveContents} key="Resolved Contents (Click to expand)" />
 </p>
 <p>
-  ...which should be the same as the last update: {resolveContents == updatedContents}
+  ...which should be the same as the last update: {JSON.stringify(resolveContents) == JSON.stringify(updatedContents)}
 </p>
