@@ -1,0 +1,24 @@
+{
+  "name": "demo-js-hyper-did",
+  "version": "1.0.0",
+  "description": "Demo the HyperID",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cross-env BABEL_DISABLE_CACHE=1 browserify -t [ sveltify ] --standalone hyperId main.js -o bundle.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "babel-loader": "^8.1.0",
+    "babelify": "^10.0.0",
+    "browserify": "^16.5.2",
+    "cross-env": "^7.0.2",
+    "events": "^3.2.0",
+    "events.once": "^2.0.2",
+    "js-did-hyper": "file:../",
+    "sveltify": "^3.0.0"
+  }
+}

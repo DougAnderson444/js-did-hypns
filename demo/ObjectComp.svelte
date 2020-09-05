@@ -51,7 +51,7 @@
   <span class:expanded on:click={toggle}>{key}</span>
   {#if expanded}
     <ul>
-      {#each [...Object.entries(val).sort()] as [key, val]}
+      {#each [...Object.entries(val)] as [key, val]}
         <li>
           {#if typeof val === 'object'}
             <svelte:self {key} {val} breadcrumbs={breadcrumbs.concat(key)} />
