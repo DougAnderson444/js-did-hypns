@@ -13,7 +13,7 @@ So with this, anyone can create their own digital identity document and save it 
 ### Browser
 
 My design goals included:
-- [ ] No download
+- [x] No download
 - [x] No sign-up
 - [x] No payment
 - [x] Use existing accounts/assets/platforms
@@ -22,7 +22,7 @@ Much of this meant it had to work in the browser, to ease adoption
 
 ### HyperComponent
 
-I developed a Svelte HyperComponent as well
+I developed a [Svelte HyperComponent](https://github.com/DougAnderson444/hyper-svelte-component) as well
 
 > When using the Dat-SDK (Hyper-SDK) to create a Hyperdrive, you need to close it after you're done with it. 
 
