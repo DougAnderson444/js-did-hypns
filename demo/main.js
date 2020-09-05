@@ -8,21 +8,3 @@ const app = new App({
     name: "world",
   },
 });
-
-//export default app;
-
-/*
-const Hyperdrive = require("./Hyperdrive.svelte");
-
-// SDK is set in index.html from the dat-sdk
-const drive = new Hyperdrive({
-  target: document.querySelector(`#hyper-id`),
-  props: {
-    SDK: SDK,
-    name: "mundo"
-  },
-});
-*/
-
-// Can also set properties this way
-// hyperId.$set({ SDK: SDK });
