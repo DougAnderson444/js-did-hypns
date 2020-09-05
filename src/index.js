@@ -5,8 +5,10 @@ import {
   InvalidDid,
   IllegalCreate,
 } from "./utils/errors";
-import { once } from "events";
 import { HYPER_DID_NAME, DID_DOC_FILENAME } from "./constants";
+
+//import { once } from "events"; //need polyfill for browsers
+import once from "events.once"; // polyfill for nodejs events.once in the browser
 
 class HyperId {
   #drive;
@@ -84,9 +86,10 @@ class HyperId {
 
         // Wait for the connection to be made
         if (!copy.peers.length) {
-          console.log("no peers yet, waiting for them...");
           await once(copy, "peer-open"); // TODO: add timeout?
         }
+
+        await once(copy, "content-feed"); // wait for the content to be fed from the remote peer
         contentString = await copy.readFile(DID_DOC_FILENAME, "utf8");
       } else {
         // self

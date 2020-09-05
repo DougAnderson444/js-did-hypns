@@ -33,6 +33,7 @@
   "homepage": "https://github.com/DougAnderson444/js-did-hyper#readme",
   "dependencies": {
     "@geut/sodium-javascript-plus": "0.0.6",
+    "events.once": "^2.0.2",
     "graceful-fs": "^4.2.4",
     "hyperswarm-web": "^2.0.0",
     "lodash": "^4.17.20",
