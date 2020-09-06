@@ -1,8 +1,12 @@
 # js-did-hyper
 
-## Javascript Decentralized Indentifiers using [Hyperdrive](https://github.com/hypercore-protocol/hyperdrive/)
+## Javascript [Decentralized Identifiers](https://www.w3.org/TR/did-core/) using [Hyperdrive Protocol](https://github.com/hypercore-protocol/hyperdrive/)
 
-This is a javascript implementation of the [Decentralized Identity Document method](https://w3c-ccg.github.io/did-method-registry/#the-registry) implementation.
+## What
+
+This is a javascript implementation of the [Decentralized Identity Document (DID Doc) method](https://w3c-ccg.github.io/did-method-registry/#the-registry) implementation.
+
+*Pre-alpha level software. Use a your own risk.*
 
 ## Why?
 
@@ -18,11 +22,19 @@ My design goals included:
 - [x] No payment
 - [x] Use existing accounts/assets/platforms
 
-Much of this meant it had to work in the browser, to ease adoption
+#1 No download: This meant it had to work in the browser, as everyone already has a browser downloaded
+
+#2 It had to work anonymously and without any server involvement to register or sign-up.
+
+#3 No payment. Why pay for hardware, processing, or storage when we all have phones, computers, and other hardware already at our disposal? Also, buyign cryptocurrency is a hassle, and a huge barrier to entry for most people.
+
+#4 Use existing accounts/platforms. To ease adoption, right along with using the browser, the system uses existing user-owner hardware and already installed software.
 
 ### HyperComponent
 
-I developed a [Svelte HyperComponent](https://github.com/DougAnderson444/hyper-svelte-component) as well
+To get the software to work in the browser, I needed a protocol that works peer to peer and automatically pins peers. The winner for mutable data is the Hyper Protocol. 
+
+I developed a [Svelte HyperComponent](https://www.npmjs.com/package/hyper-svelte-component) as well since:
 
 > When using the Dat-SDK (Hyper-SDK) to create a Hyperdrive, you need to close it after you're done with it. 
 
@@ -30,10 +42,10 @@ Svelte has a built-in `onDestroy` feature that automatically calls a function wh
 
 ## Document and Key Manager ("Wallet")
 
-The demo shows how to interact with the `did-hyper` module and save DID doc details directly. In reality, you'll likely use a DID `wallet` to manage all this, like [https://github.com/DougAnderson444/streamlined-idm-wallet-sdk](https://github.com/DougAnderson444/streamlined-idm-wallet-sdk).
+The demo folder shows how to interact with the `did-hyper` module and save DID doc details directly. In reality, you'll likely use a DID `wallet` to manage all this, like [https://github.com/DougAnderson444/streamlined-idm-wallet-sdk](https://github.com/DougAnderson444/streamlined-idm-wallet-sdk) or any other DID doc management software.
 
 ## Create, Read, Update and Delete did:hyper identities
 
 You can create a DID doc by simply passing a hyperdrive into this module.
 
-PRs welcome.
+PRs welcome, this is a work in progress.

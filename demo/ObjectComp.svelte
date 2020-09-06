@@ -1,11 +1,11 @@
 <script>
-  export let breadcrumbs = [] // keys that lead back to the top
-  export let key
-  export let val
-  export let expanded = false
+  export let breadcrumbs = []; // keys that lead back to the top
+  export let key;
+  export let val;
+  export let expanded = false;
 
   function toggle() {
-    expanded = !expanded
+    expanded = !expanded;
   }
 </script>
 
@@ -16,14 +16,14 @@
     cursor: pointer;
   }
   .menuclosed:before {
-    content: '\f07b > ';
+    content: "\f07b > ";
     font: normal normal normal 1.5em/1 FontAwesome;
     color: #ccc;
     padding-right: 0.1em;
     margin-right: 0.1em;
   }
   .expanded:before {
-    content: '\f07c > ';
+    content: "\f07c > ";
     font: normal normal normal 1.5em/1 FontAwesome;
     color: #ccc;
     padding-right: 0.1em;
@@ -46,6 +46,11 @@
   }
 </style>
 
+<svelte:head>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+</svelte:head>
 <div>
   <span class:menuclosed={!expanded} on:click={toggle} />
   <span class:expanded on:click={toggle}>{key}</span>

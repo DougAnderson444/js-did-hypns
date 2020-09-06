@@ -20,5 +20,8 @@
     "events.once": "^2.0.2",
     "js-did-hyper": "file:../",
     "sveltify": "^3.0.0"
+  },
+  "dependencies": {
+    "hyper-svelte-component": "^1.0.1"
   }
 }

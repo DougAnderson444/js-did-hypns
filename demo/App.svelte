@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  const HyperComponent = require("./HyperComponent.svelte");
+  const HyperComponent = require("hyper-svelte-component");
   const ObjectComp = require("./ObjectComp.svelte");
   import createDidHyper, { resolve, getDid } from "js-did-hyper";
   const once = require("events.once"); // polyfill for nodejs events.once in the browser

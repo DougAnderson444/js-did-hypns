@@ -3,3 +3,4 @@ npm-debug.log*
 coverage
 es/
 lib/
+demo/bundle.js
