@@ -13,7 +13,7 @@ function add_css() {
 	append(document.head, style);
 }
 
-// (154:4) {#if dougsDrive}
+// (151:4) {#if dougsDrive}
 function create_if_block_9(ctx) {
 	let await_block_anchor;
 	let promise;
@@ -63,7 +63,7 @@ function create_if_block_9(ctx) {
 	};
 }
 
-// (159:6) {:catch error}
+// (156:6) {:catch error}
 function create_catch_block_3(ctx) {
 	let p;
 	let t0;
@@ -90,7 +90,7 @@ function create_catch_block_3(ctx) {
 	};
 }
 
-// (157:6) {:then resolved}
+// (154:6) {:then resolved}
 function create_then_block_3(ctx) {
 	let t0;
 	let t1_value = /*dougsDrive*/ ctx[3].key.toString("hex") + "";
@@ -115,7 +115,7 @@ function create_then_block_3(ctx) {
 	};
 }
 
-// (155:23)           Loading Doug's Drive        {:then resolved}
+// (152:23)           Loading Doug's Drive        {:then resolved}
 function create_pending_block_3(ctx) {
 	let t;
 
@@ -133,7 +133,7 @@ function create_pending_block_3(ctx) {
 	};
 }
 
-// (166:4) {#if rangersDrive}
+// (163:4) {#if rangersDrive}
 function create_if_block_8(ctx) {
 	let await_block_anchor;
 	let promise;
@@ -183,7 +183,7 @@ function create_if_block_8(ctx) {
 	};
 }
 
-// (171:6) {:catch error}
+// (168:6) {:catch error}
 function create_catch_block_2(ctx) {
 	let p;
 	let t0;
@@ -210,7 +210,7 @@ function create_catch_block_2(ctx) {
 	};
 }
 
-// (169:6) {:then resolved}
+// (166:6) {:then resolved}
 function create_then_block_2(ctx) {
 	let t0;
 	let t1_value = /*rangersDrive*/ ctx[4].key.toString("hex") + "";
@@ -235,7 +235,7 @@ function create_then_block_2(ctx) {
 	};
 }
 
-// (167:23)           Loading Ranger's Drive        {:then resolved}
+// (164:23)           Loading Ranger's Drive        {:then resolved}
 function create_pending_block_2(ctx) {
 	let t;
 
@@ -253,7 +253,7 @@ function create_pending_block_2(ctx) {
 	};
 }
 
-// (178:4) {#if dougsDid}
+// (175:4) {#if dougsDid}
 function create_if_block_7(ctx) {
 	let await_block_anchor;
 	let promise;
@@ -300,7 +300,7 @@ function create_if_block_7(ctx) {
 	};
 }
 
-// (183:6) {:catch error}
+// (180:6) {:catch error}
 function create_catch_block_1(ctx) {
 	let p;
 	let t0;
@@ -325,7 +325,7 @@ function create_catch_block_1(ctx) {
 	};
 }
 
-// (181:6) {:then resolved}
+// (178:6) {:then resolved}
 function create_then_block_1(ctx) {
 	let t0;
 	let t1;
@@ -347,7 +347,7 @@ function create_then_block_1(ctx) {
 	};
 }
 
-// (179:23)           Loading Ranger's Drive        {:then resolved}
+// (176:23)           Loading Ranger's Drive        {:then resolved}
 function create_pending_block_1(ctx) {
 	let t;
 
@@ -365,7 +365,7 @@ function create_pending_block_1(ctx) {
 	};
 }
 
-// (190:4) {#if copyDrive}
+// (187:4) {#if copyDrive}
 function create_if_block_6(ctx) {
 	let await_block_anchor;
 	let promise;
@@ -415,7 +415,7 @@ function create_if_block_6(ctx) {
 	};
 }
 
-// (197:6) {:catch error}
+// (194:6) {:catch error}
 function create_catch_block(ctx) {
 	let p;
 	let t0;
@@ -442,7 +442,7 @@ function create_catch_block(ctx) {
 	};
 }
 
-// (193:6) {:then resolved}
+// (190:6) {:then resolved}
 function create_then_block(ctx) {
 	let t0;
 	let t1_value = /*copyDrive*/ ctx[5].key.toString("hex") + "";
@@ -495,7 +495,7 @@ function create_then_block(ctx) {
 	};
 }
 
-// (191:23)           Loading Copy of Doug's Drive        {:then resolved}
+// (188:23)           Loading Copy of Doug's Drive        {:then resolved}
 function create_pending_block(ctx) {
 	let t;
 
@@ -513,7 +513,7 @@ function create_pending_block(ctx) {
 	};
 }
 
-// (203:2) {#if initialContents}
+// (200:2) {#if initialContents}
 function create_if_block_5(ctx) {
 	let p;
 	let t0;
@@ -566,7 +566,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (212:2) {#if updatedContents}
+// (209:2) {#if updatedContents}
 function create_if_block_4(ctx) {
 	let p;
 	let t0;
@@ -619,7 +619,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (221:2) {#if did}
+// (218:2) {#if did}
 function create_if_block_3(ctx) {
 	let p;
 	let t0;
@@ -651,7 +651,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (228:2) {#if resolveSelfContents}
+// (225:2) {#if resolveSelfContents}
 function create_if_block_2(ctx) {
 	let p0;
 	let t0;
@@ -720,7 +720,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (251:2) {#if disabled}
+// (248:2) {#if disabled}
 function create_if_block_1(ctx) {
 	let t;
 
@@ -737,7 +737,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (252:2) {#if buddy}
+// (249:2) {#if buddy}
 function create_if_block(ctx) {
 	let p;
 	let t0;
@@ -1289,8 +1289,6 @@ function instance($$self, $$props, $$invalidate) {
 			// use that drive to make a hyperId
 			hyperId = createDidHyper(makeDrives);
 
-			console.log(`hyperId made`);
-
 			const createOps = document => {
 				document.addPublicKey({
 					id: "master",
@@ -1299,9 +1297,7 @@ function instance($$self, $$props, $$invalidate) {
 				});
 			};
 
-			console.log(`using DougsDrive`, dougsDrive.key.toString("hex"), dougsDrive.writable);
 			$$invalidate(11, initialContents = await hyperId.create(dougsDrive, createOps));
-			console.log(`initialContents made`);
 
 			const updateOps = document => {
 				document.addPublicKey({
@@ -4492,7 +4488,7 @@ class HyperId {
         } // Wait for the connection to be made
 
 
-        if (!copy.peers.length) {
+        if (!copy.writable && !copy.peers.length) {
           await (0, _events.default)(copy, "peer-open"); // TODO: add timeout?
         }
 
