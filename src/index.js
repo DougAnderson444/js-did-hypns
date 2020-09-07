@@ -79,7 +79,7 @@ class HyperId {
       }
 
       // Wait for the connection to be made
-      if (!copy.peers.length) {
+      if (!copy.writable && !copy.peers.length ) {
         await once(copy, "peer-open"); // TODO: add timeout?
       }
 

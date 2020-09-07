@@ -69,8 +69,6 @@
       // use that drive to make a hyperId
       hyperId = createDidHyper(makeDrives);
 
-      console.log(`hyperId made`);
-
       const createOps = document => {
         document.addPublicKey({
           id: "master",
@@ -78,7 +76,7 @@
           publicKeyPem: "master.publicKey"
         });
       };
-      console.log(`using DougsDrive`, dougsDrive.key.toString("hex"), dougsDrive.writable);
+      
       initialContents = await hyperId.create(dougsDrive, createOps);
 
       const updateOps = document => {
