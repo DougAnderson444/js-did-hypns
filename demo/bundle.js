@@ -4,7 +4,7 @@
 
 const { SvelteComponent, add_flush_callback, append, attr, bind, binding_callbacks, check_outros, create_component, destroy_component, detach, element, empty, group_outros, handle_promise, init, insert, listen, mount_component, noop, prevent_default, run_all, safe_not_equal, set_data, set_input_value, space, text, transition_in, transition_out } = require("svelte/internal");
 const { onMount } = require("svelte");
-const { default: createDidHyper, resolve, getDid } = require("js-did-hyper");
+const { default: createDidHyper, getDid } = require("js-did-hyper");
 
 function add_css() {
 	var style = element("style");
@@ -13,7 +13,7 @@ function add_css() {
 	append(document.head, style);
 }
 
-// (151:4) {#if dougsDrive}
+// (154:4) {#if dougsDrive}
 function create_if_block_9(ctx) {
 	let await_block_anchor;
 	let promise;
@@ -63,7 +63,7 @@ function create_if_block_9(ctx) {
 	};
 }
 
-// (156:6) {:catch error}
+// (159:6) {:catch error}
 function create_catch_block_3(ctx) {
 	let p;
 	let t0;
@@ -90,7 +90,7 @@ function create_catch_block_3(ctx) {
 	};
 }
 
-// (154:6) {:then resolved}
+// (157:6) {:then resolved}
 function create_then_block_3(ctx) {
 	let t0;
 	let t1_value = /*dougsDrive*/ ctx[3].key.toString("hex") + "";
@@ -115,7 +115,7 @@ function create_then_block_3(ctx) {
 	};
 }
 
-// (152:23)           Loading Doug's Drive        {:then resolved}
+// (155:23)           Loading Doug's Drive        {:then resolved}
 function create_pending_block_3(ctx) {
 	let t;
 
@@ -133,7 +133,7 @@ function create_pending_block_3(ctx) {
 	};
 }
 
-// (163:4) {#if rangersDrive}
+// (166:4) {#if rangersDrive}
 function create_if_block_8(ctx) {
 	let await_block_anchor;
 	let promise;
@@ -183,7 +183,7 @@ function create_if_block_8(ctx) {
 	};
 }
 
-// (168:6) {:catch error}
+// (171:6) {:catch error}
 function create_catch_block_2(ctx) {
 	let p;
 	let t0;
@@ -210,7 +210,7 @@ function create_catch_block_2(ctx) {
 	};
 }
 
-// (166:6) {:then resolved}
+// (169:6) {:then resolved}
 function create_then_block_2(ctx) {
 	let t0;
 	let t1_value = /*rangersDrive*/ ctx[4].key.toString("hex") + "";
@@ -235,7 +235,7 @@ function create_then_block_2(ctx) {
 	};
 }
 
-// (164:23)           Loading Ranger's Drive        {:then resolved}
+// (167:23)           Loading Ranger's Drive        {:then resolved}
 function create_pending_block_2(ctx) {
 	let t;
 
@@ -253,7 +253,7 @@ function create_pending_block_2(ctx) {
 	};
 }
 
-// (175:4) {#if dougsDid}
+// (178:4) {#if dougsDid}
 function create_if_block_7(ctx) {
 	let await_block_anchor;
 	let promise;
@@ -300,7 +300,7 @@ function create_if_block_7(ctx) {
 	};
 }
 
-// (180:6) {:catch error}
+// (183:6) {:catch error}
 function create_catch_block_1(ctx) {
 	let p;
 	let t0;
@@ -325,7 +325,7 @@ function create_catch_block_1(ctx) {
 	};
 }
 
-// (178:6) {:then resolved}
+// (181:6) {:then resolved}
 function create_then_block_1(ctx) {
 	let t0;
 	let t1;
@@ -347,7 +347,7 @@ function create_then_block_1(ctx) {
 	};
 }
 
-// (176:23)           Loading Ranger's Drive        {:then resolved}
+// (179:23)           Loading Ranger's Drive        {:then resolved}
 function create_pending_block_1(ctx) {
 	let t;
 
@@ -365,7 +365,7 @@ function create_pending_block_1(ctx) {
 	};
 }
 
-// (187:4) {#if copyDrive}
+// (190:4) {#if copyDrive}
 function create_if_block_6(ctx) {
 	let await_block_anchor;
 	let promise;
@@ -415,7 +415,7 @@ function create_if_block_6(ctx) {
 	};
 }
 
-// (194:6) {:catch error}
+// (197:6) {:catch error}
 function create_catch_block(ctx) {
 	let p;
 	let t0;
@@ -442,7 +442,7 @@ function create_catch_block(ctx) {
 	};
 }
 
-// (190:6) {:then resolved}
+// (193:6) {:then resolved}
 function create_then_block(ctx) {
 	let t0;
 	let t1_value = /*copyDrive*/ ctx[5].key.toString("hex") + "";
@@ -495,7 +495,7 @@ function create_then_block(ctx) {
 	};
 }
 
-// (188:23)           Loading Copy of Doug's Drive        {:then resolved}
+// (191:23)           Loading Copy of Doug's Drive        {:then resolved}
 function create_pending_block(ctx) {
 	let t;
 
@@ -513,7 +513,7 @@ function create_pending_block(ctx) {
 	};
 }
 
-// (200:2) {#if initialContents}
+// (203:2) {#if initialContents}
 function create_if_block_5(ctx) {
 	let p;
 	let t0;
@@ -566,7 +566,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (209:2) {#if updatedContents}
+// (212:2) {#if updatedContents}
 function create_if_block_4(ctx) {
 	let p;
 	let t0;
@@ -619,7 +619,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (218:2) {#if did}
+// (221:2) {#if did}
 function create_if_block_3(ctx) {
 	let p;
 	let t0;
@@ -651,7 +651,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (225:2) {#if resolveSelfContents}
+// (228:2) {#if resolveSelfContents}
 function create_if_block_2(ctx) {
 	let p0;
 	let t0;
@@ -720,7 +720,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (248:2) {#if disabled}
+// (251:2) {#if disabled}
 function create_if_block_1(ctx) {
 	let t;
 
@@ -737,7 +737,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (249:2) {#if buddy}
+// (252:2) {#if buddy}
 function create_if_block(ctx) {
 	let p;
 	let t0;
@@ -1287,7 +1287,9 @@ function instance($$self, $$props, $$invalidate) {
 	const doDid = async () => {
 		try {
 			// use that drive to make a hyperId
-			hyperId = await createDidHyper(makeDrives);
+			hyperId = createDidHyper(makeDrives);
+
+			console.log(`hyperId made`);
 
 			const createOps = document => {
 				document.addPublicKey({
@@ -1297,7 +1299,9 @@ function instance($$self, $$props, $$invalidate) {
 				});
 			};
 
-			$$invalidate(11, initialContents = await hyperId.create(createOps));
+			console.log(`using DougsDrive`, dougsDrive.key.toString("hex"), dougsDrive.writable);
+			$$invalidate(11, initialContents = await hyperId.create(dougsDrive, createOps));
+			console.log(`initialContents made`);
 
 			const updateOps = document => {
 				document.addPublicKey({
@@ -1307,10 +1311,10 @@ function instance($$self, $$props, $$invalidate) {
 				});
 			};
 
-			$$invalidate(12, updatedContents = await hyperId.update(updateOps));
+			$$invalidate(12, updatedContents = await hyperId.update(dougsDrive, updateOps));
 
-			// get the DID of this hyperId
-			$$invalidate(9, did = await hyperId.getDid());
+			// get the DID of this drive
+			$$invalidate(9, did = await getDid(dougsDrive));
 
 			// get the DID Doc of this DID (if possible)
 			$$invalidate(10, resolveSelfContents = await hyperId.resolve(did));
@@ -4416,63 +4420,54 @@ function _classPrivateFieldGet(receiver, privateMap) { var descriptor = privateM
 
 function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = privateMap.get(receiver); if (!descriptor) { throw new TypeError("attempted to set private field on non-instance"); } if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } return value; }
 
-var _drive = new WeakMap();
-
 var _Hyperdrive = new WeakMap();
 
 // polyfill for nodejs events.once in the browser
 class HyperId {
-  constructor(drive, Hyperdrive) {
-    _drive.set(this, {
-      writable: true,
-      value: void 0
-    });
-
+  constructor(Hyperdrive) {
     _Hyperdrive.set(this, {
       writable: true,
       value: void 0
     });
 
-    _defineProperty(this, "assertDrive", async () => {
-      try {
-        await _classPrivateFieldGet(this, _drive).ready();
-      } catch (error) {
-        throw new _errors.UnavailableHyperdrive();
-      }
-
-      if (!_classPrivateFieldGet(this, _drive).writable) throw new _errors.UnavailableHyperdrive();
-      return await this.getDid();
-    });
-
-    _defineProperty(this, "create", async operations => {
-      const did = await this.assertDrive();
+    _defineProperty(this, "create", async (drive, operations) => {
+      await assertDrive(drive);
+      const did = await getDid(drive);
 
       try {
         // try to read it to ensure it doesnt already exist
-        await _classPrivateFieldGet(this, _drive).readFile(_constants.DID_DOC_FILENAME, "utf8");
+        await drive.readFile(_constants.DID_DOC_FILENAME, "utf8");
       } catch (error) {
         // if it fails to read, we are allowed to create it
         const document = (0, _document.default)(did);
         operations(document);
-        return await this.publish(document.getContent());
+        return await this.publish(drive, document.getContent());
       } // if it reads successfully, DID Doc exists already, we need to throw IllegalCreate
 
 
       throw new _errors.IllegalCreate();
     });
 
-    _defineProperty(this, "update", async operations => {
-      const did = await this.assertDrive();
-      const contentString = await _classPrivateFieldGet(this, _drive).readFile(_constants.DID_DOC_FILENAME, "utf8");
+    _defineProperty(this, "update", async (drive, operations) => {
+      await assertDrive(drive);
+      const did = await getDid(drive);
+      let contentString;
+
+      try {
+        contentString = await drive.readFile(_constants.DID_DOC_FILENAME, "utf8");
+      } catch (error) {
+        throw new _errors.UnavailableHyperdrive();
+      }
+
       const content = JSON.parse(contentString);
       const document = (0, _document.default)(did, content);
       operations(document);
-      return await this.publish(document.getContent());
+      return await this.publish(drive, document.getContent());
     });
 
-    _defineProperty(this, "publish", async content => {
+    _defineProperty(this, "publish", async (drive, content) => {
       try {
-        await _classPrivateFieldGet(this, _drive).writeFile(_constants.DID_DOC_FILENAME, JSON.stringify(content));
+        await drive.writeFile(_constants.DID_DOC_FILENAME, JSON.stringify(content));
         return content;
       } catch (error) {
         console.log(error);
@@ -4486,31 +4481,24 @@ class HyperId {
       } = (0, _utils.parseDid)(did);
 
       try {
-        let content, contentString;
+        let content, contentString; // not self, get a copy of the drive
 
-        if (did && identifier != _classPrivateFieldGet(this, _drive).key.toString("hex")) {
-          // not self, get a copy
-          const copy = _classPrivateFieldGet(this, _Hyperdrive).call(this, identifier);
+        const copy = _classPrivateFieldGet(this, _Hyperdrive).call(this, identifier);
 
-          try {
-            await copy.ready();
-          } catch (error) {
-            throw new _errors.UnavailableHyperdrive();
-          } // Wait for the connection to be made
+        try {
+          await copy.ready();
+        } catch (error) {
+          throw new _errors.UnavailableHyperdrive();
+        } // Wait for the connection to be made
 
 
-          if (!copy.peers.length) {
-            await (0, _events.default)(copy, "peer-open"); // TODO: add timeout?
-          }
-
-          await (0, _events.default)(copy, "content-feed"); // wait for the content to be fed from the remote peer
-
-          contentString = await copy.readFile(_constants.DID_DOC_FILENAME, "utf8");
-        } else {
-          // self
-          contentString = await _classPrivateFieldGet(this, _drive).readFile(_constants.DID_DOC_FILENAME, "utf8");
+        if (!copy.peers.length) {
+          await (0, _events.default)(copy, "peer-open"); // TODO: add timeout?
         }
 
+        if (!copy.writable) await (0, _events.default)(copy, "content-feed"); // wait for the content to be fed from the remote peer
+
+        contentString = await copy.readFile(_constants.DID_DOC_FILENAME, "utf8");
         content = JSON.parse(contentString);
         (0, _document.assertDocument)(content);
         return content;
@@ -4527,40 +4515,31 @@ class HyperId {
       }
     });
 
-    _defineProperty(this, "getDid", async () => {
-      try {
-        await _classPrivateFieldGet(this, _drive).ready();
-      } catch (error) {
-        throw new _errors.UnavailableHyperdrive();
-      }
-
-      return `did:hyper:${_classPrivateFieldGet(this, _drive).key.toString("hex")}`;
-    });
-
-    _classPrivateFieldSet(this, _drive, drive);
-
     _classPrivateFieldSet(this, _Hyperdrive, Hyperdrive);
   }
 
 }
 
-const getDid = async drive => {
+const assertDrive = async drive => {
   try {
     await drive.ready();
   } catch (error) {
     throw new _errors.UnavailableHyperdrive();
   }
 
+  if (!drive.writable) throw new _errors.UnavailableHyperdrive();
+  return await getDid(drive);
+};
+
+const getDid = async drive => {
+  await drive.ready();
   return `did:hyper:${drive.key.toString("hex")}`;
 };
 
 exports.getDid = getDid;
 
-const createDidHyper = async Hyperdrive => {
-  const drive = Hyperdrive(_constants.HYPER_DID_NAME);
-  await drive.ready();
-  if (!drive.writable) throw new _errors.UnavailableHyperdrive();
-  return new HyperId(drive, Hyperdrive);
+const createDidHyper = Hyperdrive => {
+  return new HyperId(Hyperdrive);
 };
 
 var _default = createDidHyper;

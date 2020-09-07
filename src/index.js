@@ -11,57 +11,52 @@ import { HYPER_DID_NAME, DID_DOC_FILENAME } from "./constants";
 import once from "events.once"; // polyfill for nodejs events.once in the browser
 
 class HyperId {
-  #drive;
   #Hyperdrive;
 
-  constructor(drive, Hyperdrive) {
-    this.#drive = drive;
+  constructor(Hyperdrive) {
     this.#Hyperdrive = Hyperdrive;
   }
 
-  assertDrive = async () => {
-    try {
-      await this.#drive.ready();
-    } catch (error) {
-      throw new UnavailableHyperdrive();
-    }
-    if (!this.#drive.writable) throw new UnavailableHyperdrive();
-
-    return await this.getDid();
-  };
-
-  create = async (operations) => {
-    const did = await this.assertDrive();
+  create = async (drive, operations) => {
+    await assertDrive(drive);
+    const did = await getDid(drive);
     try {
       // try to read it to ensure it doesnt already exist
-      await this.#drive.readFile(DID_DOC_FILENAME, "utf8");
+      await drive.readFile(DID_DOC_FILENAME, "utf8");
     } catch (error) {
       // if it fails to read, we are allowed to create it
       const document = createDocument(did);
 
       operations(document);
 
-      return await this.publish(document.getContent());
+      return await this.publish(drive, document.getContent());
     }
 
     // if it reads successfully, DID Doc exists already, we need to throw IllegalCreate
     throw new IllegalCreate();
   };
 
-  update = async (operations) => {
-    const did = await this.assertDrive();
-    const contentString = await this.#drive.readFile(DID_DOC_FILENAME, "utf8");
+  update = async (drive, operations) => {
+    await assertDrive(drive);
+    const did = await getDid(drive);
+
+    let contentString;
+    try {
+      contentString = await drive.readFile(DID_DOC_FILENAME, "utf8");
+    } catch (error) {
+      throw new UnavailableHyperdrive();
+    }
     const content = JSON.parse(contentString);
     const document = createDocument(did, content);
 
     operations(document);
 
-    return await this.publish(document.getContent());
+    return await this.publish(drive, document.getContent());
   };
 
-  publish = async (content) => {
+  publish = async (drive, content) => {
     try {
-      await this.#drive.writeFile(DID_DOC_FILENAME, JSON.stringify(content));
+      await drive.writeFile(DID_DOC_FILENAME, JSON.stringify(content));
       return content;
     } catch (error) {
       console.log(error);
@@ -74,27 +69,22 @@ class HyperId {
     try {
       let content, contentString;
 
-      if (did && identifier != this.#drive.key.toString("hex")) {
-        // not self, get a copy
-        const copy = this.#Hyperdrive(identifier);
+      // not self, get a copy of the drive
+      const copy = this.#Hyperdrive(identifier);
 
-        try {
-          await copy.ready();
-        } catch (error) {
-          throw new UnavailableHyperdrive();
-        }
-
-        // Wait for the connection to be made
-        if (!copy.peers.length) {
-          await once(copy, "peer-open"); // TODO: add timeout?
-        }
-
-        await once(copy, "content-feed"); // wait for the content to be fed from the remote peer
-        contentString = await copy.readFile(DID_DOC_FILENAME, "utf8");
-      } else {
-        // self
-        contentString = await this.#drive.readFile(DID_DOC_FILENAME, "utf8");
+      try {
+        await copy.ready();
+      } catch (error) {
+        throw new UnavailableHyperdrive();
       }
+
+      // Wait for the connection to be made
+      if (!copy.peers.length) {
+        await once(copy, "peer-open"); // TODO: add timeout?
+      }
+
+      if (!copy.writable) await once(copy, "content-feed"); // wait for the content to be fed from the remote peer
+      contentString = await copy.readFile(DID_DOC_FILENAME, "utf8");
 
       content = JSON.parse(contentString);
 
@@ -111,31 +101,26 @@ class HyperId {
       });
     }
   };
-  getDid = async () => {
-    try {
-      await this.#drive.ready();
-    } catch (error) {
-      throw new UnavailableHyperdrive();
-    }
-    return `did:hyper:${this.#drive.key.toString("hex")}`;
-  };
 }
 
-export const getDid = async (drive) => {
+const assertDrive = async (drive) => {
   try {
     await drive.ready();
   } catch (error) {
     throw new UnavailableHyperdrive();
   }
+  if (!drive.writable) throw new UnavailableHyperdrive();
+
+  return await getDid(drive);
+};
+
+export const getDid = async (drive) => {
+  await drive.ready();
   return `did:hyper:${drive.key.toString("hex")}`;
 };
 
-const createDidHyper = async (Hyperdrive) => {
-  const drive = Hyperdrive(HYPER_DID_NAME);
-  await drive.ready();
-  if (!drive.writable) throw new UnavailableHyperdrive();
-
-  return new HyperId(drive, Hyperdrive);
+const createDidHyper = (Hyperdrive) => {
+  return new HyperId(Hyperdrive);
 };
 
 export default createDidHyper;

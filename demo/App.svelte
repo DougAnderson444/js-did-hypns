@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   const HyperComponent = require("hyper-svelte-component");
   const ObjectComp = require("./ObjectComp.svelte");
-  import createDidHyper, { resolve, getDid } from "js-did-hyper";
+  import createDidHyper, { getDid } from "js-did-hyper";
   const once = require("events.once"); // polyfill for nodejs events.once in the browser
   //const { once } = require("events"); //doesn't work, need the polyfill for browsers
 
@@ -67,7 +67,9 @@
   const doDid = async () => {
     try {
       // use that drive to make a hyperId
-      hyperId = await createDidHyper(makeDrives);
+      hyperId = createDidHyper(makeDrives);
+
+      console.log(`hyperId made`);
 
       const createOps = document => {
         document.addPublicKey({
@@ -76,8 +78,8 @@
           publicKeyPem: "master.publicKey"
         });
       };
-
-      initialContents = await hyperId.create(createOps);
+      console.log(`using DougsDrive`, dougsDrive.key.toString("hex"), dougsDrive.writable);
+      initialContents = await hyperId.create(dougsDrive, createOps);
 
       const updateOps = document => {
         document.addPublicKey({
@@ -87,10 +89,10 @@
         });
       };
 
-      updatedContents = await hyperId.update(updateOps);
+      updatedContents = await hyperId.update(dougsDrive, updateOps);
 
-      // get the DID of this hyperId
-      did = await hyperId.getDid();
+      // get the DID of this drive
+      did = await getDid(dougsDrive);
 
       // get the DID Doc of this DID (if possible)
       resolveSelfContents = await hyperId.resolve(did);
