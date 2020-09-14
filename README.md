@@ -6,17 +6,18 @@
 
 This is a javascript implementation of the [Decentralized Identity Document (DID Doc) method](https://w3c-ccg.github.io/did-method-registry/#the-registry) implementation.
 
-*Pre-alpha level software. Use a your own risk.*
+_Pre-alpha level software. Use a your own risk._
 
 ## Why?
 
-Most of the DID method implementations I have seen are based on blockchains. I wanted an implementation that worked without having to buy cryptocurrency and then spend the crypto every time you want to change your DID Doc. Hyperdrive is truly peer-to-peer, and free to the user. 
+Most of the DID method implementations I have seen are based on blockchains. I wanted an implementation that worked without having to buy cryptocurrency and then spend the crypto every time you want to change your DID Doc. Hyperdrive is truly peer-to-peer, and free to the user.
 
 So with this, anyone can create their own digital identity document and save it to their own machine. Theirs stays online as long as their computer is up, or any friends also have their computer running.
 
 ### Browser
 
 My design goals included:
+
 - [x] No download
 - [x] No sign-up
 - [x] No payment
@@ -32,13 +33,60 @@ My design goals included:
 
 ### HyperComponent
 
-To get the software to work in the browser, I needed a protocol that works peer to peer and automatically pins peers. The winner for mutable data is the Hyper Protocol. 
+To get the software to work in the browser, I needed a protocol that works peer to peer and automatically pins peers. The winner for mutable data is the Hyper Protocol.
 
 I developed a [Svelte HyperComponent](https://www.npmjs.com/package/hyper-svelte-component) as well since:
 
-> When using the Dat-SDK (Hyper-SDK) to create a Hyperdrive, you need to close it after you're done with it. 
+> When using the Dat-SDK (Hyper-SDK) to create a Hyperdrive, you need to close it after you're done with it.
 
 Svelte has a built-in `onDestroy` feature that automatically calls a function when the component is destroyed. So by baking the SDK and Hyperdrive into a Svelte component, I can "set it and forget it" about calling the `await close()` after I'm done with the SDK.
+
+## API
+
+```js
+import createDidHyper, { getDid } from "js-did-hyper";
+
+// initate the hyperId object
+hyperId = createDidHyper(Hyperdrive);
+
+const dougsDrive = Hyperdrive("Doug's hyperdrive");
+
+const createOps = (document) => {
+  document.addPublicKey({
+    id: "master",
+    type: "RsaVerificationKey2018",
+    publicKeyPem: "master.publicKey",
+  });
+};
+
+// make a DID doc on this drive
+const initialContents = await hyperId.create(dougsDrive, createOps);
+
+const updateOps = (document) => {
+  document.addPublicKey({
+    id: "secondary",
+    type: "RsaVerificationKey2018",
+    publicKeyPem: "secondary.publicKey",
+  });
+};
+
+// update an existing DID doc on this drive
+updatedContents = await hyperId.update(dougsDrive, updateOps);
+
+// get the DID of this drive
+did = await getDid(dougsDrive);
+// did:hyper:abc123def....
+
+// get the DID Doc of this DID (if possible)
+resolveSelfContents = await hyperId.resolve(did);
+// the actual DID doc with all the keys, methods, services, etc.
+
+
+// get the DID Doc of a peer
+peersContents = await hyperId.resolve("did:hyper:123cba456def...");
+
+
+```
 
 ## Document and Key Manager ("Wallet")
 
