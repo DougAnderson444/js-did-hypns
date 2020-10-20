@@ -1,32 +1,32 @@
-import { SEPARATORS, isEquivalentId, createId } from './utils';
-import { DuplicateService, InvalidService } from '../utils/errors';
+import { SEPARATORS, isEquivalentId, createId } from './utils'
+import { DuplicateService, InvalidService } from '../utils/errors'
 
-const SEPARATOR = SEPARATORS.SERVICE;
-const REQUIRED = ['type', 'serviceEndpoint'];
+const SEPARATOR = SEPARATORS.SERVICE
+const REQUIRED = ['type', 'serviceEndpoint']
 
 const assertId = (service, services) => {
-    const collision = services.find((key) => isEquivalentId(key.id, service.id, SEPARATOR));
+  const collision = services.find((key) => isEquivalentId(key.id, service.id, SEPARATOR))
 
-    if (collision) {
-        throw new DuplicateService(service.id);
-    }
-};
+  if (collision) {
+    throw new DuplicateService(service.id)
+  }
+}
 
 const assertRequired = (publicKey) => {
-    REQUIRED.forEach((key) => {
-        if (!publicKey[key]) {
-            throw new InvalidService(`Service requires \`${key}\` to be defined.`);
-        }
-    });
-};
+  REQUIRED.forEach((key) => {
+    if (!publicKey[key]) {
+      throw new InvalidService(`Service requires \`${key}\` to be defined.`)
+    }
+  })
+}
 
 const assert = (service, services) => {
-    assertId(service, services);
-    assertRequired(service);
-};
+  assertId(service, services)
+  assertRequired(service)
+}
 
 export default {
-    assert,
-    separator: SEPARATOR,
-    createId: (did, fragment, options) => createId(did, fragment, SEPARATOR, options),
-};
+  assert,
+  separator: SEPARATOR,
+  createId: (did, fragment, options) => createId(did, fragment, SEPARATOR, options)
+}

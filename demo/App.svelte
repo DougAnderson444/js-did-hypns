@@ -9,6 +9,11 @@
   export let SDK; // passed from App.svelte, which comes from window.datSDK in index.html
   export let makeDrives; // passed from <Hyperdrive > binding
   export let makeDriveCopies;
+  const RAI = require("random-access-idb");
+  const storage = RAI("hyperId-" + new Date(Date.now()).toLocaleString());
+
+  let sdkOpts = { persist: true, storage };
+  let sdkOpts2 = { persist: false };
 
   let hyperId;
   let dougsDrive, rangersDrive;
@@ -76,7 +81,7 @@
           publicKeyPem: "master.publicKey"
         });
       };
-      
+
       initialContents = await hyperId.create(dougsDrive, createOps);
 
       const updateOps = document => {
@@ -139,8 +144,9 @@
   }
 </style>
 
-<HyperComponent {SDK} bind:Hyperdrive={makeDrives} />
-<HyperComponent {SDK} bind:Hyperdrive={makeDriveCopies} />
+<HyperComponent {SDK} bind:Hyperdrive={makeDrives} {sdkOpts} />
+<HyperComponent {SDK} bind:Hyperdrive={makeDriveCopies} sdkOpts={sdkOpts2} />
+
 <main>
   <h1>Demo the HyperDid!</h1>
   <p>This is a basic demo of how to interact with js-did-hyper.</p>

@@ -8,7 +8,9 @@
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src -d lib --ignore \"**/__tests__\" --delete-dir-on-start",
     "build:es": "cross-env BABEL_ENV=es babel src -d es --ignore \"**/__tests__\" --delete-dir-on-start",
     "build": "npm run build:commonjs && npm run build:es",
-    "test": "jest --coverage"
+    "test": "jest --coverage --detectOpenHandles",
+    "test-mocha": "mocha --require @babel/register --exit ",
+    "lint": "standard --fix"
   },
   "repository": {
     "type": "git",
@@ -37,26 +39,35 @@
     "graceful-fs": "^4.2.4",
     "hyperswarm-web": "^2.0.0",
     "lodash": "^4.17.20",
-    "util": "^0.12.3"
+    "util": "^0.12.3",
+    "hypns": "../HyPNS"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.11.4",
+    "@babel/node": "^7.12.1",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/plugin-proposal-private-methods": "^7.10.4",
     "@babel/preset-env": "^7.11.0",
+    "@babel/register": "^7.12.1",
     "@moxy/babel-preset": "^3.3.1",
+    "babel-eslint": "^10.1.0",
     "babel-jest": "^26.3.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "cross-env": "^7.0.2",
-    "jest": "^26.4.2",
     "eslint": "^7.11.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.4.2",
+    "mocha": "^8.2.0",
+    "nyc": "^15.1.0",
+    "standard": "^14.3.4"
   },
   "jest": {
-    "testRegex": "/__tests__/.*\\.test\\.js$"
+    "testRegex": "/__tests__/hypns.*\\.test\\.js$"
   }
 }

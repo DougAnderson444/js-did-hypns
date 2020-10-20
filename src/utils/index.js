@@ -1,26 +1,26 @@
-import { InvalidDid } from './errors';
+import { InvalidDid } from './errors'
 
 export const parseDid = (did) => {
-    const match = did.match(/did:(\w+):(\w+).*/);
+  const match = did.match(/did:(\w+):(\w+).*/)
 
-    if (!match) {
-        throw new InvalidDid(did);
-    }
+  if (!match) {
+    throw new InvalidDid(did)
+  }
 
-    return { method: match[1], identifier: match[2] };
-};
+  return { method: match[1], identifier: match[2] }
+}
 
 export const isDidValid = (did) => {
-    try {
-        parseDid(did);
+  try {
+    parseDid(did)
 
-        return true;
-    } catch (err) {
-        return false;
-    }
-};
+    return true
+  } catch (err) {
+    return false
+  }
+}
 
 export const generateRandomString = () =>
-    Math.random()
+  Math.random()
     .toString(36)
-    .substring(2);
+    .substring(2)

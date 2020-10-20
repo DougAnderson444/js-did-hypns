@@ -1,126 +1,119 @@
-import createDocument, { assertDocument } from "./document";
-import { parseDid } from "./utils";
+import createDocument, { assertDocument } from './document'
+import { parseDid } from './utils'
 import {
-  UnavailableHyperdrive,
+  UnavailableHypnsInstance,
   InvalidDid,
-  IllegalCreate,
-} from "./utils/errors";
-import { HYPER_DID_NAME, DID_DOC_FILENAME } from "./constants";
+  IllegalCreate
+} from './utils/errors'
 
-//import { once } from "events"; //need polyfill for browsers
-import once from "events.once"; // polyfill for nodejs events.once in the browser
+// import { once } from 'events' // need polyfill for browsers
+// import once from 'events.once' // polyfill for nodejs events.once in the browser
+const once = require('events.once') // polyfill for nodejs events.once in the browser
+
+const HyPNS = require('hypns')
 
 class HyperId {
-  #Hyperdrive;
-
-  constructor(Hyperdrive) {
-    this.#Hyperdrive = Hyperdrive;
-  }
-
-  create = async (drive, operations) => {
-    await assertDrive(drive);
-    const did = await getDid(drive);
-    try {
-      // try to read it to ensure it doesnt already exist
-      await drive.readFile(DID_DOC_FILENAME, "utf8");
-    } catch (error) {
+  create = async (hypnsInstance, operations) => {
+    assertInstance(hypnsInstance)
+    const did = getDid(hypnsInstance)
+    if (!hypnsInstance.latest) {
       // if it fails to read, we are allowed to create it
-      const document = createDocument(did);
+      const document = createDocument(did)
 
-      operations(document);
+      operations(document)
 
-      return await this.publish(drive, document.getContent());
+      return await this.publish(hypnsInstance, document.getContent())
     }
 
     // if it reads successfully, DID Doc exists already, we need to throw IllegalCreate
-    throw new IllegalCreate();
-  };
+    throw new IllegalCreate()
+  }
 
-  update = async (drive, operations) => {
-    await assertDrive(drive);
-    const did = await getDid(drive);
-
-    let contentString;
+  update = async (hypnsInstance, operations) => {
     try {
-      contentString = await drive.readFile(DID_DOC_FILENAME, "utf8");
+      assertInstance(hypnsInstance)
+      const did = getDid(hypnsInstance)
+      const content = hypnsInstance.latest.didDoc
+      const document = createDocument(did, content)
+
+      operations(document)
+
+      return await this.publish(hypnsInstance, document.getContent())
     } catch (error) {
-      throw new UnavailableHyperdrive();
+      throw new UnavailableHypnsInstance()
     }
-    const content = JSON.parse(contentString);
-    const document = createDocument(did, content);
+  }
 
-    operations(document);
-
-    return await this.publish(drive, document.getContent());
-  };
-
-  publish = async (drive, content) => {
+  publish = async (hypnsInstance, content) => {
     try {
-      await drive.writeFile(DID_DOC_FILENAME, JSON.stringify(content));
-      return content;
+      await hypnsInstance.publish({ didDoc: content, text: content })
+      return content
     } catch (error) {
-      console.log(error);
-      throw new UnavailableHyperdrive();
+      console.error(error)
+      throw new UnavailableHypnsInstance()
     }
   };
 
   resolve = async (did) => {
-    const { identifier } = parseDid(did);
-    try {
-      let content, contentString;
+    var peerNode = new HyPNS({ persist: false })
+    const { identifier: publicKey } = parseDid(did)
 
-      // not self, get a copy of the drive
-      const copy = this.#Hyperdrive(identifier);
+    try {
+      var copy = await peerNode.open({ keypair: { publicKey } })
+      copy.on('error', (error) => {
+        console.error('\nCopy error in Hypns resolve\n', error) // JSON.stringify(error, null, 2)
+      })
+
+      process.nextTick(async () => {
+        try {
+          await copy.ready()
+        } catch (error) {
+          console.error('next Tick', error)
+        }
+      })
 
       try {
-        await copy.ready();
+        await once(copy, 'update') // wait for the content to be updated from the remote peer
       } catch (error) {
-        throw new UnavailableHyperdrive();
+        console.error('await once error', error)
       }
 
-      // Wait for the connection to be made
-      if (!copy.writable && !copy.peers.length ) {
-        await once(copy, "peer-open"); // TODO: add timeout?
-      }
+      const content = copy.latest.didDoc
 
-      if (!copy.writable) await once(copy, "content-feed"); // wait for the content to be fed from the remote peer
-      contentString = await copy.readFile(DID_DOC_FILENAME, "utf8");
-
-      content = JSON.parse(contentString);
-
-      assertDocument(content);
-      return content;
+      assertDocument(content)
+      return content
     } catch (err) {
-      console.log("resolve Error: ", err);
-      if (err.code === "INVALID_DOCUMENT") {
-        throw err;
+      console.log('resolve Error: ', err)
+      if (err.code === 'INVALID_DOCUMENT') {
+        throw err
       }
 
       throw new InvalidDid(did, `Unable to resolve document with DID: ${did}`, {
-        originalError: err.message,
-      });
+        originalError: err.message
+      })
+    } finally {
+      console.log('closing node')
+      peerNode.close().then(() => {
+        console.log('node closed')
+      })
     }
   };
 }
 
-const assertDrive = async (drive) => {
-  try {
-    await drive.ready();
-  } catch (error) {
-    throw new UnavailableHyperdrive();
-  }
-  if (!drive.writable) throw new UnavailableHyperdrive();
+const assertInstance = (hypnsInstance) => {
+  if (!hypnsInstance.writable || typeof hypnsInstance.publish !== 'function') throw new UnavailableHypnsInstance()
 
-  return await getDid(drive);
-};
+  return getDid(hypnsInstance)
+}
 
-export const getDid = async (drive) => {
-  await drive.ready();
-  return `did:hyper:${drive.key.toString("hex")}`;
-};
+export const getDid = (hypnsInstance) => {
+  return `did:hyper:${hypnsInstance.publicKey}`
+}
 
-const createDidHyper = (Hyperdrive) => {
-  return new HyperId(Hyperdrive);
-};
+const hyperDid = () => {
+  return new HyperId()
+}
 
-export default createDidHyper;
+// export default hyperDid
+module.exports = hyperDid
+// module.exports = { createDidHyper, getDid }
