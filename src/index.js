@@ -92,10 +92,10 @@ class HyperId {
         originalError: err.message
       })
     } finally {
-      console.log('closing node')
-      peerNode.close().then(() => {
-        console.log('node closed')
-      })
+      await peerNode.close() // or,
+      // peerNode.close().then(() => {
+      //   console.log('node closed')
+      // })
     }
   };
 }
