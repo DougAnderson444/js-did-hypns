@@ -90,14 +90,6 @@ export class IllegalCreate extends BaseError {
   }
 }
 
-export class UnavailableHyperdrive extends BaseError {
-  constructor (message) {
-    message = message || 'Hyperdrive is unavailable.'
-
-    super(message, 'HYPERDRIVE_UNAVAILABLE')
-  }
-}
-
 export class UnavailableHypnsInstance extends BaseError {
   constructor (message) {
     message = message || 'Hypns Instance is unavailable.'
