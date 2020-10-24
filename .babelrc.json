@@ -1,4 +1,14 @@
 {
-    "presets": [["@moxy/babel-preset/lib"]],
-    "plugins": ["@babel/plugin-proposal-private-methods","@babel/plugin-proposal-class-properties"]
+    "presets": [
+        ["@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          },
+          "modules": "commonjs"
+        }]
+    ],
+    "plugins": [
+        ["@babel/plugin-proposal-private-methods"],["@babel/plugin-proposal-class-properties"]
+    ]
 }
