@@ -21,8 +21,8 @@ const mockNewKeypair = {
   secretKey: mockpersistPrivateKey
 }
 
-const mockDid = `did:hyper:${mockPublicKey}`
-const mockNewDid = `did:hyper:${mockpersistPublicKey}`
+const mockDid = `did:hypns:${mockPublicKey}`
+const mockNewDid = `did:hypns:${mockpersistPublicKey}`
 
 const mockCreatedDocument = {
   '@context': 'https://w3id.org/did/v1',

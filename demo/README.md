@@ -11,7 +11,7 @@ The demo makes a copule of drives, replicates them to make sure Hyperdrive is wo
 
 Then it builds a few DID docs, updates, repliactes, etc.
 
-Then open up a new window, and copy-paste thar did:hyper:... into the first window.
+Then open up a new window, and copy-paste thar did:hypns:... into the first window.
 
 You'll see the remote's DID appear below, which will match the second window.
 

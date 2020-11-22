@@ -49,8 +49,8 @@ describe('addPublicKey', () => {
     })
 
     const expectedResult = {
-      id: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#randomString',
-      controller: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD',
+      id: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#randomString',
+      controller: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD',
       type: 'myType',
       publicKeyHex: '1A2B3C'
     }
@@ -71,8 +71,8 @@ describe('addPublicKey', () => {
     }, { idPrefix: 'foobar-' })
 
     const expectedResult = {
-      id: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#foobar-randomString',
-      controller: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD',
+      id: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#foobar-randomString',
+      controller: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD',
       type: 'myType',
       publicKeyHex: '1A2B3C'
     }
@@ -101,7 +101,7 @@ describe('addPublicKey', () => {
         controller: 'myController2',
         publicKeyHex: '4D5E6F'
       })
-    }).toThrow('PublicKey with same did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#myId1 already exists.')
+    }).toThrow('PublicKey with same did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#myId1 already exists.')
   })
 
   it('should not accept publicKey without type', async () => {
@@ -167,12 +167,12 @@ describe('revokePublicKey', () => {
   it('should revoke publicKey with full id successfully', async () => {
     const document = await createDocument(mockDid, mockContent)
 
-    document.revokePublicKey('did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1')
+    document.revokePublicKey('did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1')
     expect(document.getContent()).toEqual({ ...mockContent })
 
     document.addPublicKey({ ...mockPublickKey1, id: 'PK1' })
     document.addPublicKey({ ...mockPublickKey2, id: 'PK2' })
-    document.revokePublicKey('did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1')
+    document.revokePublicKey('did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1')
     expect(document.getContent()).toEqual({
       ...mockContent,
       publicKey: [mockPublickKey2],
@@ -197,7 +197,7 @@ describe('revokePublicKey', () => {
     const content = {
       ...mockContent,
       publicKey: [mockPublickKey1, mockPublickKey2],
-      authentication: ['did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1']
+      authentication: ['did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1']
     }
     const document = await createDocument(mockDid, content)
 
@@ -213,7 +213,7 @@ describe('revokePublicKey', () => {
 
 describe('addAuthentication', () => {
   it('should add authentication successfully', async () => {
-    const id = 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
+    const id = 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
     const content = { ...mockContent, publicKey: [mockPublickKey1] }
     const document = await createDocument(mockDid, content)
 
@@ -228,7 +228,7 @@ describe('addAuthentication', () => {
   })
 
   it('should add authentication with short id successfully', async () => {
-    const id = 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
+    const id = 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
     const content = { ...mockContent, publicKey: [mockPublickKey1] }
     const document = await createDocument(mockDid, content)
 
@@ -244,15 +244,15 @@ describe('addAuthentication', () => {
   })
 
   it('should fail if same id already exists', async () => {
-    const id = 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
+    const id = 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
     const content = { ...mockContent, publicKey: [mockPublickKey1], authentication: [id] }
     const document = await createDocument(mockDid, content)
 
-    expect(() => document.addAuthentication(id)).toThrow('Authentication with same did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1 already exists.')
+    expect(() => document.addAuthentication(id)).toThrow('Authentication with same did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1 already exists.')
   })
 
   it('should fail if no publicKey with same id', async () => {
-    const id = 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
+    const id = 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
     const content = { ...mockContent }
     const document = await createDocument(mockDid, content)
 
@@ -269,7 +269,7 @@ describe('addAuthentication', () => {
 
 describe('removeAuthentication', () => {
   it('should remove authentication successfully', async () => {
-    const id = 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
+    const id = 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
     const content = { ...mockContent, authentication: [id] }
     const document = await createDocument(mockDid, content)
 
@@ -279,8 +279,8 @@ describe('removeAuthentication', () => {
   })
 
   it('should not update if no id found', async () => {
-    const id1 = 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
-    const id2 = 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK2'
+    const id1 = 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK1'
+    const id2 = 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD#PK2'
     const content = { ...mockContent, publicKey: [mockPublickKey1, mockPublickKey2] }
     const document = await createDocument(mockDid, content)
 
@@ -307,7 +307,7 @@ describe('addService', () => {
     })
 
     const expectedResult = {
-      id: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD;randomString',
+      id: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD;randomString',
       type: 'myServiceType',
       serviceEndpoint: 'http://service.foo.bar'
     }
@@ -328,7 +328,7 @@ describe('addService', () => {
     }, { idPrefix: 'foobar-' })
 
     const expectedResult = {
-      id: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD;foobar-randomString',
+      id: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD;foobar-randomString',
       type: 'myServiceType',
       serviceEndpoint: 'http://service.foo.bar'
     }
@@ -355,7 +355,7 @@ describe('addService', () => {
         type: 'myServiceType2',
         serviceEndpoint: 'hhttp://service.foo.bar'
       })
-    }).toThrow('Service with same did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD;foo already exists.')
+    }).toThrow('Service with same did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD;foo already exists.')
   })
 
   it('should not accept service without type', async () => {
@@ -400,7 +400,7 @@ describe('addService', () => {
 
 describe('removeService', () => {
   it('should remove service with full id successfully', async () => {
-    const fullId = 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD;Service1'
+    const fullId = 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD;Service1'
     const document = await createDocument(mockDid)
 
     document.removeService(fullId)
@@ -435,7 +435,7 @@ describe('assertDocument', () => {
   it('should assert document successfully', () => {
     const mockDocument = {
       '@context': ['https://w3id.org/did/v1', 'https://example.context.org'],
-      id: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
+      id: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
     }
 
     expect(() => assertDocument(mockDocument)).not.toThrow()
@@ -449,7 +449,7 @@ describe('assertDocument', () => {
 
   it('should throw if document has no context property', () => {
     const mockDocument = {
-      id: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
+      id: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
     }
 
     expect(() => assertDocument(mockDocument)).toThrow('Document content must contain "@context" property.')
@@ -458,7 +458,7 @@ describe('assertDocument', () => {
   it('should throw if document has context property with invalid type', () => {
     const mockDocument = {
       '@context': 123,
-      id: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
+      id: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
     }
 
     expect(() => assertDocument(mockDocument)).toThrow('Document "@context" value must be a string or an ordered set.')
@@ -467,7 +467,7 @@ describe('assertDocument', () => {
   it('should throw if document has multiple contexts but the first one is not the default', () => {
     const mockDocument = {
       '@context': ['fooBar', 'https://w3id.org/did/v1'],
-      id: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
+      id: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
     }
 
     expect(() => assertDocument(mockDocument)).toThrow('First "@context" value must be: "https://w3id.org/did/v1". Found: "fooBar"')
@@ -476,7 +476,7 @@ describe('assertDocument', () => {
   it('should throw if document has just one context and is not the default', () => {
     const mockDocument = {
       '@context': 'fooBar',
-      id: 'did:hyper:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
+      id: 'did:hypns:BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
     }
 
     expect(() => assertDocument(mockDocument)).toThrow('Document with only one "@context" value must be none other than: "https://w3id.org/did/v1". Found: "fooBar"')

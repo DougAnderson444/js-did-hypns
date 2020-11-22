@@ -1,14 +1,14 @@
 import { parseDid, isDidValid } from '../index'
 
 const mockIdentifier = 'BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD'
-const mockDID = `did:hyper:${mockIdentifier}`
+const mockDID = `did:hypns:${mockIdentifier}`
 const mockInvalidDID = `${mockIdentifier}`
 
 describe('parseDid', () => {
   it('should parse DID correctly', async () => {
     const result = await parseDid(mockDID)
 
-    expect(result).toEqual({ method: 'hyper', identifier: mockIdentifier })
+    expect(result).toEqual({ method: 'hypns', identifier: mockIdentifier })
   })
 
   it('should fail if invalid DID', async () => {

@@ -116,7 +116,7 @@ const assertDrive = async (drive) => {
 
 export const getDid = async (drive) => {
   await drive.ready();
-  return `did:hyper:${drive.key.toString("hex")}`;
+  return `did:hypns:${drive.key.toString("hex")}`;
 };
 
 const createDidHyper = (Hyperdrive) => {

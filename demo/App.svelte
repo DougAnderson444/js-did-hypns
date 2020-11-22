@@ -159,7 +159,7 @@
   {/if}
   <div>
     <form class="form" on:submit|preventDefault={handleSubmit}>
-      Get a peer's DID Doc (enter their did:hyper:abc123abc123...):
+      Get a peer's DID Doc (enter their did:hypns:abc123abc123...):
       <br />
       <input
         type="text"

@@ -1,6 +1,6 @@
 {
-  "name": "js-did-hyper",
-  "version": "3.0.0",
+  "name": "js-did-hypns",
+  "version": "4.0.0",
   "description": "Decentralized identity document method using hyper protocol",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DougAnderson444/js-did-hyper.git"
+    "url": "git+https://github.com/DougAnderson444/js-did-hypns.git"
   },
   "keywords": [
-    "hyper",
+    "hypns",
     "dat",
     "did",
     "method",
-    "ssi"
+    "hypercore"
   ],
   "author": "Douglas S Anderson",
   "license": "MIT",
@@ -31,9 +31,9 @@
     "es"
   ],
   "bugs": {
-    "url": "https://github.com/DougAnderson444/js-did-hyper/issues"
+    "url": "https://github.com/DougAnderson444/js-did-hypns/issues"
   },
-  "homepage": "https://github.com/DougAnderson444/js-did-hyper#readme",
+  "homepage": "https://github.com/DougAnderson444/js-did-hypns#readme",
   "dependencies": {
     "@geut/sodium-javascript-plus": "0.0.6",
     "events.once": "^2.0.2",

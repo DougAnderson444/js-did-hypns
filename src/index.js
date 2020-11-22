@@ -105,7 +105,7 @@ const assertInstance = (hypnsInstance) => {
 }
 
 export const getDid = (hypnsInstance) => {
-  return `did:hyper:${hypnsInstance.publicKey}`
+  return `did:hypns:${hypnsInstance.publicKey}`
 }
 
 export const createHyperDid = (node) => {

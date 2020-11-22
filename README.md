@@ -1,8 +1,8 @@
-# js-did-hyper / js-did-hypns
+# js-did-hypns
 
 ## Javascript [Decentralized Identifiers](https://www.w3.org/TR/did-core/) using [Hyperdrive Protocol](https://github.com/hypercore-protocol/hyperdrive/)
 
-A HyperId = HyperdDID + HyPNS HyperNode + A Keypair
+A HypnsId = DID + HyPNS Node + Keypair
 
 ## What
 
@@ -41,22 +41,22 @@ My design goals included:
 
 To get the software to work in the browser, I needed a protocol that works peer to peer and automatically pins peers. The winner for mutable data is the Hypercore-Protocol.
 
-I developed a [Svelte HyperComponent](https://www.npmjs.com/package/hypns-svelte-component) as well to make working with Hyper and Multifeed easier.
+I developed a [Svelte Hypns Component](https://www.npmjs.com/package/hypns-svelte-component) as well to make working with Hyper and Multifeed easier.
 
 Svelte has a built-in `onDestroy` feature that automatically calls a function when the component is destroyed. So by baking the SDK and Hyperdrive into a Svelte component, I can "set it and forget it" about calling the `await close()` after I'm done with the SDK. See HyPNS for more details.
 
 ## API
 
 ```js
-import { createDidHyper, getDid } from "js-did-hyper";
+import { createDidHyper, getDid } from "js-did-hypns";
 import HyPNS from 'hypns' // or use the HyPNS-Svelte-Component in Svelte!
 
 var myNode = new HyPNS({ persist: false })
 const myInstance = await myNode.open({ keypair }) // or leave empty to generate new pair
 await myInstance.ready() // must wait for it to configure
 
-// initate the hyperId object using the node
-hyperId = createDidHyper(myNode);
+// initate the hypnsId object using the node
+hypnsId = createDidHyper(myNode);
 
 const createOps = (document) => {
   document.addPublicKey({
@@ -67,7 +67,7 @@ const createOps = (document) => {
 };
 
 // make a DID doc on this HyPNS instance
-const initialDocument = await hyperId.create(myInstance, operations)
+const initialDocument = await hypnsId.create(myInstance, operations)
 
 const updateOps = (document) => {
   document.addPublicKey({
@@ -78,18 +78,18 @@ const updateOps = (document) => {
 };
 
 // update an existing DID doc on this drive
-updatedContents = await hyperId.update(myInstance, updateOps);
+updatedContents = await hypnsId.update(myInstance, updateOps);
 
 // get the DID of this drive
 did = await getDid(myInstance);
-// did:hyper:abc123def....
+// did:hypns:abc123def....
 
 // get the DID Doc of this DID (if possible)
-resolveSelfContents = await hyperId.resolve(did);
+resolveSelfContents = await hypnsId.resolve(did);
 // the actual DID doc with all the keys, methods, services, etc.
 
 // get the DID Doc of a peer
-peersContents = await hyperId.resolve("did:hyper:123cba456def...");
+peersContents = await hypnsId.resolve("did:hypns:123cba456def...");
 
 
 ```
@@ -98,9 +98,9 @@ peersContents = await hyperId.resolve("did:hyper:123cba456def...");
 
 TODO: demo needs updating
 
-The demo folder shows how to interact with the `did-hyper` module and save DID doc details directly. In reality, you'll likely use a DID `wallet` to manage all this, like [https://github.com/DougAnderson444/streamlined-idm-wallet-sdk](https://github.com/DougAnderson444/streamlined-idm-wallet-sdk) or any other DID doc management software.
+The demo folder shows how to interact with the `did-hypns` module and save DID doc details directly. In reality, you'll likely use a DID `wallet` to manage all this, like [https://github.com/DougAnderson444/streamlined-idm-wallet-sdk](https://github.com/DougAnderson444/streamlined-idm-wallet-sdk) or any other DID doc management software.
 
-## Create, Read, Update and Delete did:hyper identities
+## Create, Read, Update and Delete did:hypns identities
 
 You can create a DID doc by simply passing a hyperdrive into this module.
 

@@ -12,7 +12,7 @@ const mockKeypair = {
 export let mockFileName
 export let mockFileWriteContent
 
-export const mockDid = `did:hyper:${mockPublicKey}`
+export const mockDid = `did:hypns:${mockPublicKey}`
 
 export const mockCreatedDocument = {
   '@context': 'https://w3id.org/did/v1',
