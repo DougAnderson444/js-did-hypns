@@ -10,14 +10,16 @@ import {
 // import once from 'events.once' // polyfill for nodejs events.once in the browser
 const once = require('events.once') // polyfill for nodejs events.once in the browser
 
-const HyPNS = require('hypns')
+class HyperDid {
+  constructor (node) {
+    this.node = node
+  }
 
-class HyperId {
   create = async (hypnsInstance, operations) => {
     assertInstance(hypnsInstance)
     const did = getDid(hypnsInstance)
     if (!hypnsInstance.latest) {
-      // if it fails to read, we are allowed to create it
+    // if it fails to read, we are allowed to create it
       const document = createDocument(did)
 
       operations(document)
@@ -55,11 +57,10 @@ class HyperId {
   };
 
   resolve = async (did) => {
-    var peerNode = new HyPNS({ persist: false })
     const { identifier: publicKey } = parseDid(did)
 
     try {
-      var copy = await peerNode.open({ keypair: { publicKey } })
+      var copy = await this.node.open({ keypair: { publicKey }, temp: true })
       copy.on('error', (error) => {
         console.error('\nCopy error in Hypns resolve\n', error) // JSON.stringify(error, null, 2)
       })
@@ -92,10 +93,7 @@ class HyperId {
         originalError: err.message
       })
     } finally {
-      await peerNode.close() // or,
-      // peerNode.close().then(() => {
-      //   console.log('node closed')
-      // })
+      await copy.close()
     }
   };
 }
@@ -110,10 +108,10 @@ export const getDid = (hypnsInstance) => {
   return `did:hyper:${hypnsInstance.publicKey}`
 }
 
-const hyperDid = () => {
-  return new HyperId()
+export const createHyperDid = (node) => {
+  return new HyperDid(node)
 }
 
 // export default hyperDid
-module.exports = hyperDid
-// module.exports = { createDidHyper, getDid }
+// module.exports = hyperDid
+// module.exports = { createHyperDid, getDid }
