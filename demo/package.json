@@ -4,8 +4,7 @@
   "description": "Demo the HyperID",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cross-env BABEL_DISABLE_CACHE=1 browserify -t [ sveltify ] --standalone hyperId main.js -o bundle.js",
+    "build": "cross-env browserify -t [ sveltify ] --standalone hyperId main.js -o bundle.js",
     "demo": "npm run build && start index.html"
   },
   "author": "",
@@ -23,7 +22,7 @@
     "sveltify": "^3.0.0"
   },
   "dependencies": {
-    "hyper-svelte-component": "^1.0.1",
+    "hypns-svelte-component": "^2.5.1",
     "random-access-idb": "random-access-storage/random-access-idb"
   }
 }

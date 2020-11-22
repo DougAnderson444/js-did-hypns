@@ -1,5 +1,7 @@
 # Demo
 
+Currently not working, need to refactor!
+
 ## Overview
 
 Shows use of the `js-did-hyper` module.
