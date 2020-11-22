@@ -12,7 +12,17 @@ const mockKeypair = {
   secretKey: mockPrivateKey
 }
 
+const mockpersistPublicKey =
+  'a9cccf7294b78c4ff18eacf98378644a2ef53d236c63cc284958dcb8aaee4488'
+const mockpersistPrivateKey =
+  '2dbaf25b261799a1bd7a2a9d3c1b0d809a6d57e299e26cb858c3b2f5c581bb86a9cccf7294b78c4ff18eacf98378644a2ef53d236c63cc284958dcb8aaee4488'
+const mockNewKeypair = {
+  publicKey: mockpersistPublicKey,
+  secretKey: mockpersistPrivateKey
+}
+
 const mockDid = `did:hyper:${mockPublicKey}`
+const mockNewDid = `did:hyper:${mockpersistPublicKey}`
 
 const mockCreatedDocument = {
   '@context': 'https://w3id.org/did/v1',
@@ -25,11 +35,10 @@ var chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 var expect = chai.expect
 
-const hyperDid = require('../src')
-const getDid = require('../src/index')
+const { createHyperDid, getDid } = require('../src')
 const HyPNS = require('hypns')
 var myNode = new HyPNS({ persist: false })
-var hyperId = hyperDid()
+var hyperId = createHyperDid(myNode)
 
 // handle shutdown gracefully
 const closeHandler = async () => {
@@ -60,7 +69,7 @@ global.Date.now = dateNowStub
 
 describe('All tests', () => {
   describe('factory', () => {
-    it('should create hyperId with all specification methods', async () => {
+    it('should create hyperId with all specification methods', () => {
       expect(typeof hyperId.resolve).to.equal('function')
       expect(typeof hyperId.create).to.equal('function')
       expect(typeof hyperId.update).to.equal('function')
@@ -88,6 +97,26 @@ describe('All tests', () => {
       // console.log(mockEmptyInstance)
       const document = await hyperId.create(mockEmptyInstance, operations)
       expect(document).to.deep.equal(mockCreatedDocument)
+
+      describe('did', () => {
+        it('should return a did', () => {
+          expect(getDid(mockEmptyInstance)).to.equal(mockDid)
+        })
+      })
+
+      describe('update', () => {
+        it('should update successfully on non-empty drive', async () => {
+          const content = await hyperId.update(mockEmptyInstance, operations)
+          expect(content).to.deep.equal(mockCreatedDocument)
+        })
+
+        it('update should fail if no document available', async () => {
+          const operations = () => {}
+          expect(
+            hyperId.update({ latest: { didDoc: null } }, operations)
+          ).to.eventually.be.rejectedWith('Hypns Instance is unavailable.')
+        })
+      })
     })
 
     it('create should fail if document already exists', () => {
@@ -108,45 +137,10 @@ describe('All tests', () => {
     })
   })
   describe('resolve', () => {
-    it('should resolve successfully', async function () {
-      const operations = () => {}
-      const instance = await myNode.open({ keypair: mockKeypair })
-      await instance.ready()
-      // console.log('\n\n#instance\n\n', instance)
-
-      // instance.network.networker.on('peer-add', (peer) => {
-      //   console.log('\n# INITIATOR peer-add \n', peer)
-      // })
-      const documentCreated = await hyperId.create(instance, operations)
-      this.timeout(15000)
-      const document = await hyperId.resolve(mockDid)
-      expect(document).to.deep.equal(documentCreated)
+    it('should resolve successfully', function () {
+      hyperId.resolve(mockNewDid).then((document) => {
+        expect(document).to.deep.equal(mockCreatedDocument)
+      })
     })
   })
 })
-// describe('update', () => {
-//   it('should update successfully on non-empty drive', async () => {
-//     const operations = jest.fn()
-//     const hyperId = await createDidHyper()
-
-//     hyperId.readFile = jest.fn(() => mockDocument)
-
-//     const document = await hyperId.update(mockHyperDrive, operations)
-
-//     expect(operations).toHaveBeenCalledTimes(1)
-//     expect(operations.mock.calls[0][0].constructor.name).toEqual('Document')
-//   })
-
-//   it('update should fail if no document available', async () => {
-//     const operations = jest.fn()
-//     const hyperId = await createDidHyper()
-
-//     hyperId.readFile = jest.fn(() => {
-//       throw new Error('foo')
-//     })
-
-//     await expect(
-//       hyperId.update(mockEmptyHyperdrive, operations)
-//     ).rejects.toThrow('foo')
-//   })
-// })
