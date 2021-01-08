@@ -1,4 +1,7 @@
+
 # js-did-hypns
+
+![travis-ci-badge](https://travis-ci.com/DougAnderson444/js-did-hyper.svg?branch=master)
 
 ## Javascript [Decentralized Identifiers](https://www.w3.org/TR/did-core/) using [Hyperdrive Protocol](https://github.com/hypercore-protocol/hyperdrive/)
 
