@@ -35,10 +35,10 @@ var chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 var expect = chai.expect
 
-const { createHyperDid, getDid } = require('../src')
+const { createHypnsDid, getDid } = require('../src')
 const HyPNS = require('hypns')
 var myNode = new HyPNS({ persist: false })
-var hyperId = createHyperDid(myNode)
+var hypnsId = createHypnsDid(myNode)
 
 // handle shutdown gracefully
 const closeHandler = async () => {
@@ -69,22 +69,22 @@ global.Date.now = dateNowStub
 
 describe('All tests', () => {
   describe('factory', () => {
-    it('should create hyperId with all specification methods', () => {
-      expect(typeof hyperId.resolve).to.equal('function')
-      expect(typeof hyperId.create).to.equal('function')
-      expect(typeof hyperId.update).to.equal('function')
+    it('should create hypnsId with all specification methods', () => {
+      expect(typeof hypnsId.resolve).to.equal('function')
+      expect(typeof hypnsId.create).to.equal('function')
+      expect(typeof hypnsId.update).to.equal('function')
       expect(typeof getDid).to.equal('function')
     })
 
-    it('should not create hyperId if hypnsInstance is not a function', () => {
+    it('should not create hypnsId if hypnsInstance is not a function', () => {
       const operations = () => {}
-      expect(hyperId.create('foo', operations)
+      expect(hypnsId.create('foo', operations)
       ).to.eventually.be.rejectedWith('Hypns Instance is unavailable.')
     })
 
-    it('should not create hyperId if hypns is not writeable', () => {
+    it('should not create hypnsId if hypns is not writeable', () => {
       expect(
-        hyperId.create({ writeable: () => false })
+        hypnsId.create({ writeable: () => false })
       ).to.eventually.be.rejectedWith('Hypns Instance is unavailable.')
     })
   })
@@ -95,7 +95,7 @@ describe('All tests', () => {
       const mockEmptyInstance = await myNode.open({ keypair: mockKeypair })
       await mockEmptyInstance.ready()
       // console.log(mockEmptyInstance)
-      const document = await hyperId.create(mockEmptyInstance, operations)
+      const document = await hypnsId.create(mockEmptyInstance, operations)
       expect(document).to.deep.equal(mockCreatedDocument)
 
       describe('did', () => {
@@ -106,14 +106,14 @@ describe('All tests', () => {
 
       describe('update', () => {
         it('should update successfully on non-empty drive', async () => {
-          const content = await hyperId.update(mockEmptyInstance, operations)
+          const content = await hypnsId.update(mockEmptyInstance, operations)
           expect(content).to.deep.equal(mockCreatedDocument)
         })
 
         it('update should fail if no document available', async () => {
           const operations = () => {}
           expect(
-            hyperId.update({ latest: { didDoc: null } }, operations)
+            hypnsId.update({ latest: { didDoc: null } }, operations)
           ).to.eventually.be.rejectedWith('Hypns Instance is unavailable.')
         })
       })
@@ -121,7 +121,7 @@ describe('All tests', () => {
 
     it('create should fail if document already exists', () => {
       const operations = () => {}
-      expect(hyperId.create({ latest: 'a did doc', writable: true }, operations))
+      expect(hypnsId.create({ latest: 'a did doc', writable: true }, operations))
         .to.eventually.be.rejectedWith('Hypns Instance is unavailable.')
     })
 
@@ -132,13 +132,13 @@ describe('All tests', () => {
       const mockEmptyInstance = await myNode.open()
       await mockEmptyInstance.ready()
       expect(
-        hyperId.create(mockEmptyInstance, operations)
+        hypnsId.create(mockEmptyInstance, operations)
       ).to.eventually.be.rejectedWith('Operation Failed')
     })
   })
   describe('resolve', () => {
     it('should resolve successfully', function () {
-      hyperId.resolve(mockNewDid).then((document) => {
+      hypnsId.resolve(mockNewDid).then((document) => {
         expect(document).to.deep.equal(mockCreatedDocument)
       })
     })

@@ -10,7 +10,7 @@ import {
 // import once from 'events.once' // polyfill for nodejs events.once in the browser
 const once = require('events.once') // polyfill for nodejs events.once in the browser
 
-class HyperDid {
+class HypnsDid {
   constructor (node) {
     this.node = node
   }
@@ -108,10 +108,6 @@ export const getDid = (hypnsInstance) => {
   return `did:hypns:${hypnsInstance.publicKey}`
 }
 
-export const createHyperDid = (node) => {
-  return new HyperDid(node)
+export const createHypnsDid = (node) => {
+  return new HypnsDid(node)
 }
-
-// export default hyperDid
-// module.exports = hyperDid
-// module.exports = { createHyperDid, getDid }
