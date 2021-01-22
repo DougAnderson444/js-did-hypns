@@ -101,10 +101,10 @@ peersContents = await hypnsId.resolve("did:hypns:123cba456def...");
 
 TODO: demo needs updating
 
-The demo folder shows how to interact with the `did-hypns` module and save DID doc details directly. In reality, you'll likely use a DID `wallet` to manage all this, like [https://github.com/DougAnderson444/streamlined-idm-wallet-sdk](https://github.com/DougAnderson444/streamlined-idm-wallet-sdk) or any other DID doc management software.
+Goal: Show how to interact with the `did-hypns` module and save DID doc details directly. In reality, you'll likely use a DID `wallet` to manage all this, like [https://github.com/DougAnderson444/streamlined-idm-wallet-sdk](https://github.com/DougAnderson444/streamlined-idm-wallet-sdk) or any other DID doc management software.
 
 ## Create, Read, Update and Delete did:hypns identities
 
-You can create a DID doc by simply passing a hyperdrive into this module.
+You can create a DID doc by simply passing a hypns reference into this module.
 
 PRs welcome, this is a work in progress.
