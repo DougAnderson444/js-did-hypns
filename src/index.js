@@ -13,11 +13,17 @@ const once = require('events.once') // polyfill for nodejs events.once in the br
 class HypnsDid {
   constructor (node) {
     this.node = node
-  }
+  };
+
+  assertInstance = (hypnsInstance) => {
+    if (!hypnsInstance.writable || typeof hypnsInstance.publish !== 'function') throw new UnavailableHypnsInstance()
+
+    return this.getDid(hypnsInstance)
+  };
 
   create = async (hypnsInstance, operations) => {
-    assertInstance(hypnsInstance)
-    const did = getDid(hypnsInstance)
+    this.assertInstance(hypnsInstance)
+    const did = this.getDid(hypnsInstance)
     if (!hypnsInstance.latest) {
     // if it fails to read, we are allowed to create it
       const document = createDocument(did)
@@ -33,8 +39,8 @@ class HypnsDid {
 
   update = async (hypnsInstance, operations) => {
     try {
-      assertInstance(hypnsInstance)
-      const did = getDid(hypnsInstance)
+      this.assertInstance(hypnsInstance)
+      const did = this.getDid(hypnsInstance)
       const content = hypnsInstance.latest.didDoc
       const document = createDocument(did, content)
 
@@ -96,18 +102,16 @@ class HypnsDid {
       await copy.close()
     }
   };
-}
 
-const assertInstance = (hypnsInstance) => {
-  if (!hypnsInstance.writable || typeof hypnsInstance.publish !== 'function') throw new UnavailableHypnsInstance()
 
-  return getDid(hypnsInstance)
-}
+  getDid = (hypnsInstance) => {
+    return `did:hypns:${hypnsInstance.publicKey}`
+  }
 
-export const getDid = (hypnsInstance) => {
-  return `did:hypns:${hypnsInstance.publicKey}`
 }
 
 export const createHypnsDid = (node) => {
   return new HypnsDid(node)
 }
+
+export default createHypnsDid

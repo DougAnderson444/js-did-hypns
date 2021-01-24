@@ -35,7 +35,7 @@ var chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 var expect = chai.expect
 
-const { createHypnsDid, getDid } = require('../src')
+const createHypnsDid = require('..').default
 const HyPNS = require('hypns')
 var myNode = new HyPNS({ persist: false })
 var hypnsId = createHypnsDid(myNode)
@@ -73,7 +73,7 @@ describe('All tests', () => {
       expect(typeof hypnsId.resolve).to.equal('function')
       expect(typeof hypnsId.create).to.equal('function')
       expect(typeof hypnsId.update).to.equal('function')
-      expect(typeof getDid).to.equal('function')
+      expect(typeof hypnsId.getDid).to.equal('function')
     })
 
     it('should not create hypnsId if hypnsInstance is not a function', () => {
@@ -100,7 +100,7 @@ describe('All tests', () => {
 
       describe('did', () => {
         it('should return a did', () => {
-          expect(getDid(mockEmptyInstance)).to.equal(mockDid)
+          expect(hypnsId.getDid(mockEmptyInstance)).to.equal(mockDid)
         })
       })
 
