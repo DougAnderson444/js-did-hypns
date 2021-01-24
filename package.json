@@ -1,6 +1,6 @@
 {
   "name": "js-did-hypns",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Decentralized identity document method using HyPNS, a kappa-multifeed over hypercore-protocol",
   "main": "lib/index.js",
   "module": "es/index.js",
