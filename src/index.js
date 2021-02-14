@@ -5,14 +5,18 @@ import {
   InvalidDid,
   IllegalCreate
 } from './utils/errors'
+import HyPNS from "hypns";
 
-// import { once } from 'events' // need polyfill for browsers
-// import once from 'events.once' // polyfill for nodejs events.once in the browser
-const once = require('events.once') // polyfill for nodejs events.once in the browser
+import * as once from 'events.once' // polyfill for nodejs events.once in the browser
+// const once = require('events.once') // polyfill for nodejs events.once in the browser
 
 class HypnsDid {
   constructor (node) {
-    this.node = node
+    if(node){
+      this.node = node
+    }else{
+      this.node = new HyPNS({ persist: false });
+    }
   };
 
   assertInstance = (hypnsInstance) => {
@@ -64,9 +68,9 @@ class HypnsDid {
 
   resolve = async (did) => {
     const { identifier: publicKey } = parseDid(did)
-
+    var copy
     try {
-      var copy = await this.node.open({ keypair: { publicKey }, temp: true })
+      copy = await this.node.open({ keypair: { publicKey }, temp: true })
       copy.on('error', (error) => {
         console.error('\nCopy error in Hypns resolve\n', error) // JSON.stringify(error, null, 2)
       })
@@ -112,6 +116,34 @@ class HypnsDid {
 
 export const createHypnsDid = (node) => {
   return new HypnsDid(node)
+}
+
+export const getResolver = () => {
+
+  const hypnsNode = new HyPNS({ persist: false })
+  const HypnsDid = createHypnsDid(hypnsNode)
+
+  async function resolve(
+    did,
+    parsed,
+    didResolver
+  ) {
+    console.log(parsed)
+    // {
+    // method: 'mymethod', 
+    // id: 'abcdefg', 
+    // did: 'did:mymethod:abcdefg/some/path#fragment=123', 
+    // path: '/some/path', 
+    // fragment: 'fragment=123'
+    // }
+    const didDoc = await HypnsDid.resolve(did) // lookup doc
+    // If you need to lookup another did as part of resolving this did document, the primary DIDResolver object is passed in as well
+    const parentDID = await didResolver.resolve(...)
+    //
+    return didDoc
+  }
+
+  return { hypns: resolve }
 }
 
 export default createHypnsDid
