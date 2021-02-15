@@ -1,6 +1,6 @@
 {
   "name": "js-did-hypns",
-  "version": "4.0.4",
+  "version": "4.1.0",
   "description": "Decentralized identity document method using HyPNS, a kappa-multifeed over hypercore-protocol",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -10,7 +10,7 @@
     "build": "npm run build:commonjs && npm run build:es",
     "test-jest": "jest --coverage --detectOpenHandles",
     "test-mocha": "cross-env BABEL_ENV=test mocha --require @babel/register --exit ",
-    "test": "npm run test-mocha && npm run test-jest",
+    "test": "npm run build && npm run test-mocha && npm run test-jest",
     "lint": "standard --fix"
   },
   "repository": {
