@@ -7,8 +7,10 @@ import {
 } from './utils/errors'
 import HyPNS from "hypns";
 
-import * as once from 'events.once' // polyfill for nodejs events.once in the browser
+import { default as once } from 'events.once' // polyfill for nodejs events.once in the browser
 // const once = require('events.once') // polyfill for nodejs events.once in the browser
+
+const RESOLVE_TIMEOUT = 1500
 
 class HypnsDid {
   constructor (node) {
@@ -82,12 +84,23 @@ class HypnsDid {
           console.error('next Tick', error)
         }
       })
-
+      
+      let result // result of the resolve attempt
       try {
-        await once(copy, 'update') // wait for the content to be updated from the remote peer
+        const update = once(copy, 'update') // wait for the content to be updated from the remote peer
+        const timer = new Promise(function(resolve, reject) {
+            setTimeout(() => resolve(false), RESOLVE_TIMEOUT);
+        });
+
+        result = await Promise.race([timer, update])
+
       } catch (error) {
-        console.error('await once error', error)
+        console.error('await update error', error)
       }
+
+      if (!result) return false // did not resolve a DID doc from this did
+      if (!copy.latest)  return false
+      if (!copy.latest.didDoc) return false
 
       const content = copy.latest.didDoc
 
@@ -138,7 +151,7 @@ export const getResolver = () => {
     // }
     const didDoc = await HypnsDid.resolve(did) // lookup doc
     // If you need to lookup another did as part of resolving this did document, the primary DIDResolver object is passed in as well
-    const parentDID = await didResolver.resolve(...)
+    // const parentDID = await didResolver.resolve(...)
     //
     return didDoc
   }
