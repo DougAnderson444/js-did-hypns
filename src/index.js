@@ -131,7 +131,8 @@ export const createHypnsDid = (node) => {
   return new HypnsDid(node)
 }
 
-export const getResolver = () => {
+// https://github.com/decentralized-identity/did-resolver
+export function  getResolver () {
 
   const hypnsNode = new HyPNS({ persist: false })
   const HypnsDid = createHypnsDid(hypnsNode)
