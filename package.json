@@ -1,6 +1,6 @@
 {
   "name": "js-did-hypns",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "Decentralized identity document method using HyPNS, a kappa-multifeed over hypercore-protocol",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -39,6 +39,7 @@
     "events.once": "^2.0.2",
     "graceful-fs": "^4.2.4",
     "hyperswarm-web": "^2.0.0",
+    "hypns": "^1.7.1",
     "lodash": "^4.17.20",
     "util": "^0.12.3"
   },
@@ -63,7 +64,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "hypns": "^1.7.1",
     "jest": "^26.4.2",
     "mocha": "^8.2.0",
     "nyc": "^15.1.0",
