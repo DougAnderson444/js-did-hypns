@@ -25,9 +25,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 // polyfill for nodejs events.once in the browser
-// const once = require('events.once') // polyfill for nodejs events.once in the browser
-const RESOLVE_TIMEOUT = 5500;
-
 class HypnsDid {
   constructor(node) {
     _defineProperty(this, "assertInstance", hypnsInstance => {
@@ -89,37 +86,30 @@ class HypnsDid {
         copy = await this.node.open({
           keypair: {
             publicKey
-          },
-          temp: true
-        });
+          }
+        }); // , temp: true
+
         copy.on('error', error => {
           console.error('\nCopy error in Hypns resolve\n', error); // JSON.stringify(error, null, 2)
         });
-        process.nextTick(async () => {
-          try {
-            await copy.ready();
-          } catch (error) {
-            console.error('next Tick', error);
-          }
-        });
-        let result; // result of the resolve attempt
 
         try {
-          const update = (0, _events.default)(copy, 'update'); // wait for the content to be updated from the remote peer
+          // const update = once(copy, 'update') // wait for the content to be updated from the remote peer
+          await copy.ready();
 
-          const timer = new Promise(function (resolve, reject) {
-            setTimeout(() => resolve('timeout'), RESOLVE_TIMEOUT);
-          });
-          result = await Promise.race([timer, update]);
+          if (!copy.latest) {
+            await (0, _events.default)(copy, 'update'); // PUSHED TO USERLAND, they can decide how long to wait for a node to resolve
+            // const timer = new Promise(function(resolve, reject) {
+            //     setTimeout(() => resolve('timeout'), RESOLVE_TIMEOUT);
+            // });
+            // const result = await Promise.race([timer, update])
+            // if (!result) throw new Error('No result') // did not resolve a DID doc from this did
+            // if (result === 'timeout') throw new Error('Timeout error') // did not resolve a DID doc from this did
+            // clearInterval(show);
+          }
         } catch (error) {
           console.error('await update error', error);
         }
-
-        if (!result) throw new Error('No result'); // did not resolve a DID doc from this did
-
-        if (result === 'timeout') throw new Error('Timeout', {
-          result
-        }); // did not resolve a DID doc from this did
 
         if (!copy.latest) throw new Error('No latest result');
         if (!copy.latest.didDoc) throw new Error('No DID Doc property');
@@ -156,7 +146,7 @@ class HypnsDid {
 
 }
 
-const createHypnsDid = node => {
+const createHypnsDid = (node = false) => {
   return new HypnsDid(node);
 }; // https://github.com/decentralized-identity/did-resolver
 
@@ -164,24 +154,20 @@ const createHypnsDid = node => {
 exports.createHypnsDid = createHypnsDid;
 
 function getResolver(opts = {}) {
-  const hypnsNode = opts.hypnsNode || new _hypns.default({
-    persist: false
-  });
-  const HypnsDid = createHypnsDid(hypnsNode);
+  const HypnsDid = createHypnsDid();
 
   async function resolve(did, parsed, didResolver) {
-    console.log(parsed); // {
+    // console.log({parsed})
+    // {
     // method: 'mymethod', 
     // id: 'abcdefg', 
     // did: 'did:mymethod:abcdefg/some/path#fragment=123', 
     // path: '/some/path', 
     // fragment: 'fragment=123'
     // }
-
     const didDoc = await HypnsDid.resolve(did); // lookup doc
     // If you need to lookup another did as part of resolving this did document, the primary DIDResolver object is passed in as well
     // const parentDID = await didResolver.resolve(...)
-    //
 
     return didDoc;
   }
