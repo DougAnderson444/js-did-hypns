@@ -35,11 +35,12 @@ var chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 var expect = chai.expect
 
-const createHypnsDid = require('..').default
+const { createHypnsDid } = require('..')
 const { getResolver } = require('..')
 const HyPNS = require('hypns')
 var myNode = new HyPNS({ persist: false })
 var hypnsId = createHypnsDid(myNode)
+var remoteHypnsId = createHypnsDid()
 
 // handle shutdown gracefully
 const closeHandler = async () => {
@@ -141,6 +142,12 @@ describe('All tests', () => {
   describe('resolve', () => {
     it('should resolve successfully', function () {
       hypnsId.resolve(mockNewDid).then((document) => {
+        expect(document).to.deep.equal(mockCreatedDocument)
+      })
+    })
+
+    it('should resolve remote successfully', function () {
+      remoteHypnsId.resolve(mockNewDid).then((document) => {
         expect(document).to.deep.equal(mockCreatedDocument)
       })
     })
