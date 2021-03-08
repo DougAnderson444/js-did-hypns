@@ -26,7 +26,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 // polyfill for nodejs events.once in the browser
 // const once = require('events.once') // polyfill for nodejs events.once in the browser
-const RESOLVE_TIMEOUT = 1500;
+const RESOLVE_TIMEOUT = 5500;
 
 class HypnsDid {
   constructor(node) {
@@ -65,10 +65,13 @@ class HypnsDid {
 
     _defineProperty(this, "publish", async (hypnsInstance, content) => {
       try {
-        await hypnsInstance.publish({
-          didDoc: content,
-          text: content
+        process.nextTick(async () => {
+          hypnsInstance.publish({
+            didDoc: content
+          });
         });
+        await (0, _events.default)(hypnsInstance, 'update'); // wait until the multifeed it up to date before returning
+
         return content;
       } catch (error) {
         console.error(error);
@@ -105,17 +108,21 @@ class HypnsDid {
           const update = (0, _events.default)(copy, 'update'); // wait for the content to be updated from the remote peer
 
           const timer = new Promise(function (resolve, reject) {
-            setTimeout(() => resolve(false), RESOLVE_TIMEOUT);
+            setTimeout(() => resolve('timeout'), RESOLVE_TIMEOUT);
           });
           result = await Promise.race([timer, update]);
         } catch (error) {
           console.error('await update error', error);
         }
 
-        if (!result) return false; // did not resolve a DID doc from this did
+        if (!result) throw new Error('No result'); // did not resolve a DID doc from this did
 
-        if (!copy.latest) return false;
-        if (!copy.latest.didDoc) return false;
+        if (result === 'timeout') throw new Error('Timeout', {
+          result
+        }); // did not resolve a DID doc from this did
+
+        if (!copy.latest) throw new Error('No latest result');
+        if (!copy.latest.didDoc) throw new Error('No DID Doc property');
         const content = copy.latest.didDoc;
         (0, _document.assertDocument)(content);
         return content;

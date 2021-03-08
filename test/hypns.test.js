@@ -92,17 +92,12 @@ describe('All tests', () => {
   })
 
   describe('create', () => {
-    it('should create successfully on empty instance', async () => {
+    it('should create successfully on empty instance', async function () {
       const operations = () => {}
       const mockEmptyInstance = await myNode.open({ keypair: mockKeypair })
       await mockEmptyInstance.ready()
-      // console.log(mockEmptyInstance)
 
-      // get the DID Doc of this DID (if possible)
-      let document = await hypnsId.resolve(hypnsId.getDid(mockEmptyInstance))
-      expect(document).to.equal(false)
-
-      document = await hypnsId.create(mockEmptyInstance, operations)
+      const document = await hypnsId.create(mockEmptyInstance, operations)
       expect(document).to.deep.equal(mockCreatedDocument)
 
       describe('did', () => {
