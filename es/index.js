@@ -3,7 +3,8 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = exports.getResolver = exports.createHypnsDid = void 0;
+exports.getResolver = getResolver;
+exports.default = exports.createHypnsDid = void 0;
 
 var _document = _interopRequireWildcard(require("./document"));
 
@@ -150,12 +151,13 @@ class HypnsDid {
 
 const createHypnsDid = node => {
   return new HypnsDid(node);
-};
+}; // https://github.com/decentralized-identity/did-resolver
+
 
 exports.createHypnsDid = createHypnsDid;
 
-const getResolver = () => {
-  const hypnsNode = new _hypns.default({
+function getResolver(opts = {}) {
+  const hypnsNode = opts.hypnsNode || new _hypns.default({
     persist: false
   });
   const HypnsDid = createHypnsDid(hypnsNode);
@@ -180,8 +182,7 @@ const getResolver = () => {
   return {
     hypns: resolve
   };
-};
+}
 
-exports.getResolver = getResolver;
 var _default = createHypnsDid;
 exports.default = _default;

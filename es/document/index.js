@@ -45,10 +45,29 @@ class Document {
       }
     });
 
+    // https://w3c.github.io/did-core/#did-document-properties
     _classPrivateFieldSet(this, _content, {
       publicKey: [],
+      // This property has been deprecated in favor or verificationMethod
       authentication: [],
       service: [],
+      //	An ordered set of Service Endpoint maps (see Section § 5.1.3 Service properties).
+      alsoKnownAs: [],
+      // An ordered set of strings that conform to the rules of [RFC3986] for URIs.
+      controller: [],
+      // A string or an ordered set of strings that conform to the rules in Section § 3.1 DID Syntax.
+      verificationMethod: [],
+      // An ordered set of Verification Method maps (see Section § 5.1.2 Verification Method properties).
+      authentication: [],
+      // An ordered set of either Verification Method maps (see Section § 5.1.2 Verification Method properties) or strings that conform to the rules in Section § 3.2 DID URL Syntax.
+      assertionMethod: [],
+      //
+      keyAgreement: [],
+      //
+      capabilityInvocation: [],
+      //
+      capabilityDelegation: [],
+      //
       ...content
     });
   }

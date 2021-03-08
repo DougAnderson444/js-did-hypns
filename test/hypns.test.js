@@ -36,6 +36,7 @@ chai.use(chaiAsPromised)
 var expect = chai.expect
 
 const createHypnsDid = require('..').default
+const { getResolver } = require('..')
 const HyPNS = require('hypns')
 var myNode = new HyPNS({ persist: false })
 var hypnsId = createHypnsDid(myNode)
@@ -74,6 +75,7 @@ describe('All tests', () => {
       expect(typeof hypnsId.create).to.equal('function')
       expect(typeof hypnsId.update).to.equal('function')
       expect(typeof hypnsId.getDid).to.equal('function')
+      expect(typeof getResolver).to.equal('function')
     })
 
     it('should not create hypnsId if hypnsInstance is not a function', () => {
@@ -146,6 +148,14 @@ describe('All tests', () => {
       hypnsId.resolve(mockNewDid).then((document) => {
         expect(document).to.deep.equal(mockCreatedDocument)
       })
+    })
+  })
+
+  describe('resolver', () => {
+    it('should get resolver successfully', function () {
+      const resolver = getResolver()
+      expect(resolver).to.have.property('hypns')
+      expect(typeof resolver.hypns).to.equal('function')
     })
   })
 })
